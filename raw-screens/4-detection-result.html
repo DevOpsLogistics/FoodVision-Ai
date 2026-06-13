@@ -1,0 +1,291 @@
+#Detection result
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FoodVision AI - Detection Results</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#ffb4a5",
+                        "surface-container-lowest": "#ffffff",
+                        "background": "#fcf9f8",
+                        "primary-fixed": "#d7ec95",
+                        "tertiary-fixed": "#f3e0c0",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-secondary-container": "#732010",
+                        "primary": "#52621c",
+                        "surface": "#fcf9f8",
+                        "tertiary-container": "#817358",
+                        "surface-container-high": "#eae7e7",
+                        "outline-variant": "#c6c8b6",
+                        "tertiary-fixed-dim": "#d6c4a5",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#161e00",
+                        "inverse-surface": "#303030",
+                        "secondary": "#9f402d",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f3f0f0",
+                        "on-tertiary-fixed": "#231a06",
+                        "on-tertiary-fixed-variant": "#51452d",
+                        "primary-fixed-dim": "#bbcf7c",
+                        "surface-variant": "#e4e2e1",
+                        "on-primary-container": "#fbffe4",
+                        "surface-tint": "#54651e",
+                        "inverse-primary": "#bbcf7c",
+                        "outline": "#767869",
+                        "surface-bright": "#fcf9f8",
+                        "secondary-container": "#fd876f",
+                        "surface-dim": "#dcd9d9",
+                        "surface-container-highest": "#e4e2e1",
+                        "tertiary": "#675a41",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f6f3f2",
+                        "on-secondary-fixed": "#3e0500",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#46483b",
+                        "on-tertiary-container": "#fffbff",
+                        "on-primary-fixed-variant": "#3d4c05",
+                        "on-surface": "#1b1c1c",
+                        "secondary-fixed": "#ffdad3",
+                        "on-background": "#1b1c1c",
+                        "primary-container": "#6a7c32",
+                        "surface-container": "#f0eded",
+                        "on-secondary-fixed-variant": "#802918"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "64px",
+                        "sm": "12px",
+                        "lg": "40px",
+                        "md": "24px",
+                        "base": "8px",
+                        "xs": "4px",
+                        "container-margin": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Libre Caslon Text"],
+                        "body-md": ["DM Sans"],
+                        "headline-sm": ["Libre Caslon Text"],
+                        "label-md": ["DM Sans"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "label-sm": ["DM Sans"],
+                        "display-lg": ["Libre Caslon Text"],
+                        "body-lg": ["DM Sans"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fcf9f8;
+            color: #1b1c1c;
+            font-family: 'DM Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+        .detection-box {
+            position: absolute;
+            border: 1.5px solid #52621c;
+            border-radius: 4px;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .detection-label {
+            position: absolute;
+            top: -24px;
+            left: 0;
+            background-color: #f3e0c0;
+            color: #1b1c1c;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+<!-- Top AppBar -->
+<header class="bg-background dark:bg-background flex justify-between items-center w-full px-container-margin h-16 max-w-[1140px] mx-auto sticky top-0 z-50">
+<div class="font-display-lg-mobile text-display-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tight">FoodVision AI</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-secondary transition-colors" data-icon="account_circle">account_circle</button>
+</div>
+</header>
+<main class="max-w-[1140px] mx-auto px-container-margin py-lg">
+<div class="flex flex-col lg:flex-row gap-lg">
+<!-- Left: Scanned Image View -->
+<div class="flex-1 relative group">
+<div class="rounded-xl overflow-hidden shadow-[0_20px_30px_rgba(27,28,28,0.06)] bg-white aspect-[4/5] md:aspect-square lg:aspect-auto">
+<div class="relative w-full h-full">
+<img alt="Scanned Food Detection" class="w-full h-full object-cover" data-alt="A top-down professional food photography shot of a ceramic plate with a sliced avocado, a perfectly poached egg with a runny yolk, and a side of microgreens. The lighting is soft, bright, and natural, typical of a high-end wellness magazine. The color palette features muted olive greens and warm creamy tones against a minimalist stone background, creating a serene and premium aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmSuQAz8BRqopRjSFhfAoRUU4wOlcmwNNr2J69Sfu6_kb9av4MrFu7yKE9PrQGVc6MTdbPdxqfllssmRE1FM0_t3VzALKxsWhl7dZax_AJGL0TSCLYZPg57vYPXCyrPkD0zg7b5u1cjlRKj_E7c6Ipf2dh2jGsQCVfEx5LIItkYNvlc2a0XGmHB2BCBg8pvJu7mK0ugz2Kom0uX_khRJH2YBvMAzcIDW0WwlzfCO0SDaT6G7_xIimXkdoXXfGdwQxiZMIZq0ZlJgx5"/>
+<!-- AI Detection Overlay Boxes -->
+<div class="detection-box" style="top: 25%; left: 15%; width: 40%; height: 50%;">
+<span class="detection-label font-label-sm text-label-sm">Avocado</span>
+</div>
+<div class="detection-box" style="top: 35%; left: 55%; width: 30%; height: 35%;">
+<span class="detection-label font-label-sm text-label-sm">Poached Egg</span>
+</div>
+<div class="detection-box" style="top: 65%; left: 30%; width: 25%; height: 20%;">
+<span class="detection-label font-label-sm text-label-sm">Greens</span>
+</div>
+</div>
+</div>
+<div class="mt-md flex justify-between items-center">
+<p class="font-label-md text-label-md text-outline">Detected 3 items in 0.8s</p>
+<button class="flex items-center gap-xs font-label-md text-label-md text-primary hover:text-secondary-container transition-colors">
+<span class="material-symbols-outlined text-[18px]" data-icon="refresh">refresh</span>
+                        Rescan
+                    </button>
+</div>
+</div>
+<!-- Right: Nutritional Breakdown & Details -->
+<div class="w-full lg:w-[400px] flex flex-col gap-md">
+<!-- Main Info Card -->
+<section class="bg-white p-md rounded-xl shadow-[0_20px_30px_rgba(27,28,28,0.04)] border border-[#F2EFE9]">
+<div class="mb-lg">
+<h1 class="font-headline-md text-headline-md text-on-surface mb-xs">Detection Result</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">We've identified your breakfast bowl elements.</p>
+</div>
+<!-- Macro Breakdown Chips -->
+<div class="flex flex-wrap gap-sm mb-lg">
+<div class="bg-secondary/10 px-4 py-2 rounded-full border border-secondary/20">
+<span class="font-label-sm text-label-sm text-secondary">385 Calories</span>
+</div>
+<div class="bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
+<span class="font-label-sm text-label-sm text-primary">18g Protein</span>
+</div>
+<div class="bg-tertiary/10 px-4 py-2 rounded-full border border-tertiary/20">
+<span class="font-label-sm text-label-sm text-tertiary">22g Fats</span>
+</div>
+</div>
+<!-- Detailed Breakdown -->
+<div class="space-y-md border-t border-[#F2EFE9] pt-md">
+<div class="flex justify-between items-center">
+<div>
+<p class="font-label-md text-label-md text-on-surface">Avocado (Half)</p>
+<p class="font-label-sm text-label-sm text-outline">160 kcal • 15g Fat</p>
+</div>
+<button class="material-symbols-outlined text-outline" data-icon="edit">edit</button>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<p class="font-label-md text-label-md text-on-surface">Poached Egg (Large)</p>
+<p class="font-label-sm text-label-sm text-outline">72 kcal • 6g Protein</p>
+</div>
+<button class="material-symbols-outlined text-outline" data-icon="edit">edit</button>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<p class="font-label-md text-label-md text-on-surface">Microgreens</p>
+<p class="font-label-sm text-label-sm text-outline">15 kcal • 2g Fiber</p>
+</div>
+<button class="material-symbols-outlined text-outline" data-icon="edit">edit</button>
+</div>
+</div>
+</section>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-sm">
+<button class="w-full bg-primary text-white py-4 rounded-xl font-label-md text-label-md shadow-lg active:scale-[0.98] transition-all hover:bg-primary-container">
+                        Log Meal
+                    </button>
+<button class="w-full bg-white border border-outline-variant text-on-surface-variant py-4 rounded-xl font-label-md text-label-md hover:bg-surface-container-low transition-colors">
+                        Edit Details
+                    </button>
+</div>
+<!-- Insights Bento Piece -->
+<div class="bg-[#FAF9F6] p-md rounded-xl border-b-2 border-primary/20">
+<div class="flex items-center gap-base mb-sm">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+<h3 class="font-label-md text-label-md font-bold uppercase tracking-wider text-primary">Vision Insight</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        High healthy fat content detected. This meal will provide sustained energy focus for roughly 4 hours. Perfect for your morning fast-break.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-lowest dark:bg-surface-dim shadow-[0_-4px_20px_rgba(27,28,28,0.04)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-fixed dark:bg-primary-container rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="center_focus_strong" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+<span class="font-label-sm text-label-sm">Scanner</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span class="font-label-sm text-label-sm">Diary</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction: Scale active navigation item briefly
+        document.querySelectorAll('nav a').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.add('scale-90');
+                setTimeout(() => item.classList.remove('scale-90'), 200);
+            });
+        });
+
+        // Toggle detection boxes highlight on hover of detail items
+        const details = document.querySelectorAll('.space-y-md > div');
+        const boxes = document.querySelectorAll('.detection-box');
+        
+        details.forEach((detail, index) => {
+            detail.addEventListener('mouseenter', () => {
+                if(boxes[index]) {
+                    boxes[index].style.borderColor = '#9f402d'; // Highlight in secondary Tomato
+                    boxes[index].style.transform = 'scale(1.02)';
+                }
+            });
+            detail.addEventListener('mouseleave', () => {
+                if(boxes[index]) {
+                    boxes[index].style.borderColor = '#52621c'; // Back to Olive
+                    boxes[index].style.transform = 'scale(1)';
+                }
+            });
+        });
+    </script>
+</body></html>

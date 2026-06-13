@@ -1,0 +1,280 @@
+#Mean recommendation: 
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#ffb4a5",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#fcf9f8",
+                    "primary-fixed": "#d7ec95",
+                    "tertiary-fixed": "#f3e0c0",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#732010",
+                    "primary": "#52621c",
+                    "surface": "#fcf9f8",
+                    "tertiary-container": "#817358",
+                    "surface-container-high": "#eae7e7",
+                    "outline-variant": "#c6c8b6",
+                    "tertiary-fixed-dim": "#d6c4a5",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#161e00",
+                    "inverse-surface": "#303030",
+                    "secondary": "#9f402d",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f3f0f0",
+                    "on-tertiary-fixed": "#231a06",
+                    "on-tertiary-fixed-variant": "#51452d",
+                    "primary-fixed-dim": "#bbcf7c",
+                    "surface-variant": "#e4e2e1",
+                    "on-primary-container": "#fbffe4",
+                    "surface-tint": "#54651e",
+                    "inverse-primary": "#bbcf7c",
+                    "outline": "#767869",
+                    "surface-bright": "#fcf9f8",
+                    "secondary-container": "#fd876f",
+                    "surface-dim": "#dcd9d9",
+                    "surface-container-highest": "#e4e2e1",
+                    "tertiary": "#675a41",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f6f3f2",
+                    "on-secondary-fixed": "#3e0500",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#46483b",
+                    "on-tertiary-container": "#fffbff",
+                    "on-primary-fixed-variant": "#3d4c05",
+                    "on-surface": "#1b1c1c",
+                    "secondary-fixed": "#ffdad3",
+                    "on-background": "#1b1c1c",
+                    "primary-container": "#6a7c32",
+                    "surface-container": "#f0eded",
+                    "on-secondary-fixed-variant": "#802918"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "64px",
+                    "sm": "12px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "container-margin": "24px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Libre Caslon Text"],
+                    "body-md": ["DM Sans"],
+                    "headline-sm": ["Libre Caslon Text"],
+                    "label-md": ["DM Sans"],
+                    "headline-md": ["Libre Caslon Text"],
+                    "label-sm": ["DM Sans"],
+                    "display-lg": ["Libre Caslon Text"],
+                    "body-lg": ["DM Sans"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .bento-image-container { position: relative; overflow: hidden; }
+        .bento-image-container img { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .bento-card:hover img { transform: scale(1.05); }
+        .scroll-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-background sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-container-margin h-16 max-w-[1140px] mx-auto">
+<span class="font-display-lg-mobile text-display-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tight">FoodVision AI</span>
+<div class="flex items-center gap-4">
+<button class="active:scale-95 transition-transform duration-150 text-on-surface-variant">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="active:scale-95 transition-transform duration-150 text-primary dark:text-primary-fixed-dim">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-[1140px] mx-auto px-container-margin pt-lg">
+<!-- Editorial Header -->
+<section class="mb-lg">
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-xs">Curated For You</h1>
+<p class="font-body-lg text-body-lg text-outline max-w-2xl">Discover nourishing meals tailored to your biometric profile and sustainability goals. A thoughtful selection for a mindful day.</p>
+</section>
+<!-- Category Chips -->
+<div class="flex gap-sm mb-lg overflow-x-auto scroll-hide pb-2">
+<button class="bg-primary-container text-on-primary-container px-4 py-2 rounded-full font-label-md text-label-md flex-shrink-0 transition-all hover:bg-primary-container/90">All Recipes</button>
+<button class="bg-surface-container-low text-on-surface-variant px-4 py-2 rounded-full font-label-md text-label-md flex-shrink-0 transition-all hover:bg-surface-container-high">Plant-Based</button>
+<button class="bg-surface-container-low text-on-surface-variant px-4 py-2 rounded-full font-label-md text-label-md flex-shrink-0 transition-all hover:bg-surface-container-high">High Protein</button>
+<button class="bg-surface-container-low text-on-surface-variant px-4 py-2 rounded-full font-label-md text-label-md flex-shrink-0 transition-all hover:bg-surface-container-high">Low Glycemic</button>
+<button class="bg-surface-container-low text-on-surface-variant px-4 py-2 rounded-full font-label-md text-label-md flex-shrink-0 transition-all hover:bg-surface-container-high">Quick Prep</button>
+</div>
+<!-- Recipe Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter md:gap-md">
+<!-- Featured Card (Large) -->
+<div class="bento-card md:col-span-8 group relative bg-surface-container-lowest rounded-xl overflow-hidden border border-[#F2EFE9] transition-all hover:shadow-[0_20px_40px_rgba(27,28,28,0.06)]">
+<div class="aspect-[16/9] overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A high-end overhead shot of a vibrant grain bowl featuring grilled halloumi, roasted sweet potatoes, and fresh avocado. The lighting is soft and natural, emphasizing the organic textures of the food. The scene is set on a minimalist cream-colored ceramic plate with a textured linen background, following a high-end wellness magazine aesthetic with a palette of soft sage, muted orange, and stone." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeWIziFx4Cq7DCZaexZPYBmHPBmwqh4FxYbXbHpIiNfYHa7bpvYzd5iimHNxzAjIYZaxh5O8dva4PDjqPyIsrG43axBrSXtQVtHLVP-WY9wQxBXlgEyq7jcx-0ywOk9vfkbhGRnVYBdU8vSNRF5d_LGOcOVbYbeeJ9L6DNtHUgplApV43ZYBBnq_N_ai-6kh3eEXPNsSd_TIl5qi9L9ZQvpZ0xJifxV6o3G6_C_Gxw4vVicJG1p-_MKkSv79veRjGmEf-LYpcobi7g"/>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary-container/90 backdrop-blur-md text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm uppercase tracking-wider">Chef's Choice</span>
+</div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-base">
+<h2 class="font-headline-md text-headline-sm md:text-headline-md text-on-surface">Harissa Roasted Roots &amp; Halloumi</h2>
+<button class="text-outline hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">bookmark</span>
+</button>
+</div>
+<div class="flex gap-md mb-md text-outline font-label-md text-label-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">schedule</span> 25 mins</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">local_fire_department</span> 480 kcal</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-lg mb-md">
+<p class="font-body-md text-body-md text-on-surface-variant italic">
+<span class="font-bold text-primary">Why this is good for you:</span> Rich in complex carbohydrates and anti-inflammatory spices that support sustained energy levels throughout your afternoon.
+                        </p>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-tertiary-fixed flex items-center justify-center text-[10px] font-bold">V</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-primary-fixed flex items-center justify-center text-[10px] font-bold">GF</div>
+</div>
+<button class="bg-primary text-on-primary px-6 py-3 rounded-full font-label-md text-label-md hover:bg-primary-container transition-all active:scale-95">Cook Now</button>
+</div>
+</div>
+</div>
+<!-- Side Card 1 -->
+<div class="bento-card md:col-span-4 group bg-surface-container-lowest rounded-xl overflow-hidden border border-[#F2EFE9] transition-all hover:shadow-[0_20px_40px_rgba(27,28,28,0.06)]">
+<div class="aspect-square overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist close-up of a fresh Mediterranean salad with bright red cherry tomatoes, dark green kale, and creamy feta cheese. The lighting is crisp and airy, evoking a boutique wellness retreat. The background is a clean, neutral stone surface, keeping the focus on the vibrant, natural colors of the ingredients." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3dYf2NJGzCbA-LGtyAQw6JPDEJaPxsFgcL8hrH8wPCdJPSB7CuvV5P_zDGD2h9CViaaFS-0kudUAv9_xtIMjPZSKWbR3YhXH1rOpkAIia7zfGMcFmkUDfjejAzG8XJ1t0P71-1EV_SRTzrs-mYjbobpizzhS_9nVE6poZGSNPR43FBz3QSeIhrly8MIxFg6TKOcRYDAkXabwBjEX6uYG0Up9twfCs06xAsdrjhWd48pAe4RAqTRr_L4TwDn-YDVHZ7ShPPZ5b0qRU"/>
+</div>
+<div class="p-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-base">Summer Kale &amp; Feta</h2>
+<div class="flex gap-4 mb-md text-outline font-label-md text-label-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">schedule</span> 15m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">local_fire_department</span> 320 kcal</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md mb-md line-clamp-2">High in Vitamin K and antioxidants to boost immune function.</p>
+<button class="w-full border border-primary text-primary px-6 py-2 rounded-full font-label-md text-label-md hover:bg-primary-container/10 transition-all">View Details</button>
+</div>
+</div>
+<!-- Grid Card 3 -->
+<div class="bento-card md:col-span-4 group bg-surface-container-lowest rounded-xl overflow-hidden border border-[#F2EFE9] transition-all hover:shadow-[0_20px_40px_rgba(27,28,28,0.06)]">
+<div class="aspect-square overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Gourmet seared salmon with a side of asparagus and lemon slices. The plate is an elegant matte ceramic in a deep charcoal gray, which contrasts beautifully with the warm pink of the fish. Soft, ambient lighting creates a calm, high-end dining atmosphere consistent with a minimalist luxury wellness brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCdUeda4lOIKvAVhZr2Lny1-tLbBGQbv7Am6LEaeY8CzZEhEGMtC3R-ow6LNGUPNB8Ixcm8u1V_3S9KTG7KKTHLM9LgXegVDJ0n6WrpWX8sDT4kyU2rhnCmW3c3fj9mXtSvKTJydqvigXnVb_USW4eofzHexnESyc6wlSx3lBd3DePmkUUsorSuNMJmOeVxb79_3AdZ2FsYFbFlcaQTNk31NJpzYlWAd-nZgCLMlOxTBW6zVHGX4mx1qr8Ub3XhTjDf6w1Zivl8EDEW"/>
+</div>
+<div class="p-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-base">Lemon Butter Salmon</h2>
+<div class="flex gap-4 mb-md text-outline font-label-md text-label-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">schedule</span> 20m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">local_fire_department</span> 510 kcal</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md mb-md line-clamp-2">Omega-3 fatty acids for cognitive health and heart support.</p>
+<button class="w-full border border-primary text-primary px-6 py-2 rounded-full font-label-md text-label-md hover:bg-primary-container/10 transition-all">View Details</button>
+</div>
+</div>
+<!-- Grid Card 4 -->
+<div class="bento-card md:col-span-4 group bg-surface-container-lowest rounded-xl overflow-hidden border border-[#F2EFE9] transition-all hover:shadow-[0_20px_40px_rgba(27,28,28,0.06)]">
+<div class="aspect-square overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A modern, top-down view of a colorful Buddha bowl containing quinoa, chickpeas, spinach, and shaved carrots. The arrangement is artistic and clean, photographed with a high-key lighting style that emphasizes a fresh, light-mode design aesthetic. Subtle shadows add depth without weight." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRuU_N_Q4J-j5W4K4_yHUQ3aH8Tyj9qtVC2jRcC3d8RFwJhvfAGoNuzZwL7-aIf6Pvk6e_uFCloClMpnUIbBt7fWdCTwUsfJWyBEGaivRBHGZpidam50VAGSk0mUxS1jJm2p69ae3CNskSsAJlLbqEYxTful3jXjYX7oRbDtJdCzBabYSUERdwD33c7tCfDZjuBCZML0mFjrr085WNBb3T9ongglsXDS-GkcuWyZ0ZgiioG8_J-t6cQ2ZK0MOWL_vMTKSdT7pw85ZY"/>
+</div>
+<div class="p-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-base">Power Protein Bowl</h2>
+<div class="flex gap-4 mb-md text-outline font-label-md text-label-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">schedule</span> 10m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">local_fire_department</span> 410 kcal</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md mb-md line-clamp-2">Plant-based fiber for improved digestion and metabolic health.</p>
+<button class="w-full border border-primary text-primary px-6 py-2 rounded-full font-label-md text-label-md hover:bg-primary-container/10 transition-all">View Details</button>
+</div>
+</div>
+<!-- Grid Card 5 -->
+<div class="bento-card md:col-span-4 group bg-surface-container-lowest rounded-xl overflow-hidden border border-[#F2EFE9] transition-all hover:shadow-[0_20px_40px_rgba(27,28,28,0.06)]">
+<div class="aspect-square overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Artistic shot of a chilled avocado and cucumber soup served in a smooth porcelain bowl. Garnished with toasted seeds and a drizzle of emerald-colored olive oil. The aesthetic is extremely minimalist, using a soft, natural palette of greens and off-whites to communicate a premium wellness feel." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3vl6XGTK_vdScrOcyf6nBwEnF_b06A8zE8LcsWeRKMT62aRTwY09Vf3cLl_AHpuwOiWD2h_en989WzKAW5uWCVvElA_aMwc0H6i9MM4ysCpWXh2vr7rq5Gbmofqw19LOCL3jCO6fjR_rNsgSbxvJyea83BFsncVkoCSu7kEeex2vQcEZo5M9XQJEzetSlkt5v7pQMSaeWnqS0LrbhOKeVSG8ou253-rZvjjoo7EfIKBYjztQh9DRTexb3-Frsp8VUfIQEQ0udAOIj"/>
+</div>
+<div class="p-md">
+<h2 class="font-headline-sm text-headline-sm text-on-surface mb-base">Chilled Zen Soup</h2>
+<div class="flex gap-4 mb-md text-outline font-label-md text-label-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">schedule</span> 5m</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[18px]">local_fire_department</span> 220 kcal</span>
+</div>
+<p class="text-on-surface-variant font-body-md text-body-md mb-md line-clamp-2">Hydrating electrolytes and healthy fats for skin radiance.</p>
+<button class="w-full border border-primary text-primary px-6 py-2 rounded-full font-label-md text-label-md hover:bg-primary-container/10 transition-all">View Details</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 bg-surface-container-lowest dark:bg-surface-dim shadow-[0_-4px_20px_rgba(27,28,28,0.04)] rounded-t-xl flex justify-around items-center px-4 py-3 pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-fixed dark:bg-primary-container rounded-full px-4 py-1 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="center_focus_strong" style="font-variation-settings: 'FILL' 1;">center_focus_strong</span>
+<span class="font-label-sm text-label-sm">Scanner</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span class="font-label-sm text-label-sm">Diary</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for recipe saving
+        document.querySelectorAll('button .material-symbols-outlined').forEach(icon => {
+            if (icon.textContent === 'bookmark') {
+                icon.parentElement.addEventListener('click', function() {
+                    const isFilled = this.querySelector('.material-symbols-outlined').style.fontVariationSettings.includes("'FILL' 1");
+                    this.querySelector('.material-symbols-outlined').style.fontVariationSettings = isFilled ? "'FILL' 0" : "'FILL' 1";
+                    this.classList.toggle('text-secondary');
+                });
+            }
+        });
+
+        // Atmospheric parallax on scroll for hero images
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.querySelectorAll('.bento-image-container img').forEach(img => {
+                const speed = 0.05;
+                img.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body></html>

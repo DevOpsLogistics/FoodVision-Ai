@@ -1,0 +1,397 @@
+#Nutrition Analytics
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&amp;family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "secondary-fixed-dim": "#ffb4a5",
+                  "surface-container-lowest": "#ffffff",
+                  "background": "#fcf9f8",
+                  "primary-fixed": "#d7ec95",
+                  "tertiary-fixed": "#f3e0c0",
+                  "on-primary": "#ffffff",
+                  "error": "#ba1a1a",
+                  "on-secondary-container": "#732010",
+                  "primary": "#52621c",
+                  "surface": "#fcf9f8",
+                  "tertiary-container": "#817358",
+                  "surface-container-high": "#eae7e7",
+                  "outline-variant": "#c6c8b6",
+                  "tertiary-fixed-dim": "#d6c4a5",
+                  "error-container": "#ffdad6",
+                  "on-primary-fixed": "#161e00",
+                  "inverse-surface": "#303030",
+                  "secondary": "#9f402d",
+                  "on-secondary": "#ffffff",
+                  "inverse-on-surface": "#f3f0f0",
+                  "on-tertiary-fixed": "#231a06",
+                  "on-tertiary-fixed-variant": "#51452d",
+                  "primary-fixed-dim": "#bbcf7c",
+                  "surface-variant": "#e4e2e1",
+                  "on-primary-container": "#fbffe4",
+                  "surface-tint": "#54651e",
+                  "inverse-primary": "#bbcf7c",
+                  "outline": "#767869",
+                  "surface-bright": "#fcf9f8",
+                  "secondary-container": "#fd876f",
+                  "surface-dim": "#dcd9d9",
+                  "surface-container-highest": "#e4e2e1",
+                  "tertiary": "#675a41",
+                  "on-error-container": "#93000a",
+                  "on-tertiary": "#ffffff",
+                  "surface-container-low": "#f6f3f2",
+                  "on-secondary-fixed": "#3e0500",
+                  "on-error": "#ffffff",
+                  "on-surface-variant": "#46483b",
+                  "on-tertiary-container": "#fffbff",
+                  "on-primary-fixed-variant": "#3d4c05",
+                  "on-surface": "#1b1c1c",
+                  "secondary-fixed": "#ffdad3",
+                  "on-background": "#1b1c1c",
+                  "primary-container": "#6a7c32",
+                  "surface-container": "#f0eded",
+                  "on-secondary-fixed-variant": "#802918"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "spacing": {
+                  "xl": "64px",
+                  "sm": "12px",
+                  "lg": "40px",
+                  "md": "24px",
+                  "base": "8px",
+                  "xs": "4px",
+                  "container-margin": "24px",
+                  "gutter": "16px"
+          },
+          "fontFamily": {
+                  "display-lg-mobile": ["Libre Caslon Text"],
+                  "body-md": ["DM Sans"],
+                  "headline-sm": ["Libre Caslon Text"],
+                  "label-md": ["DM Sans"],
+                  "headline-md": ["Libre Caslon Text"],
+                  "label-sm": ["DM Sans"],
+                  "display-lg": ["Libre Caslon Text"],
+                  "body-lg": ["DM Sans"]
+          },
+          "fontSize": {
+                  "display-lg-mobile": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                  "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                  "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "400"}],
+                  "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                  "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "400"}],
+                  "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                  "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                  "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .glass-card {
+      background: #FFFFFF;
+      box-shadow: 0 20px 30px rgba(27, 28, 28, 0.05);
+      border: 1px solid #F2EFE9;
+    }
+    .editorial-border {
+      border-bottom: 1px solid #767869;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #c6c8b6;
+      border-radius: 10px;
+    }
+    .bar-transition {
+      transition: height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen pb-24 md:pb-0 md:pt-16">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-background">
+<div class="flex justify-between items-center w-full px-container-margin h-16 max-w-[1140px] mx-auto">
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary tracking-tight">FoodVision AI</h1>
+<div class="flex items-center gap-4">
+<button class="active:scale-95 transition-transform duration-150 text-on-surface-variant hover:text-secondary">
+<span class="material-symbols-outlined text-[28px]" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-[1140px] mx-auto px-container-margin pt-8 pb-12">
+<!-- Header Section -->
+<section class="mb-lg">
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<span class="font-label-md text-label-md text-primary uppercase tracking-widest mb-2 block">Monthly Overview</span>
+<h2 class="font-headline-md text-headline-md text-on-surface leading-tight">Your nutrition insights</h2>
+</div>
+<div class="flex gap-2 bg-surface-container p-1 rounded-full w-fit">
+<button class="px-6 py-2 rounded-full font-label-md text-label-md bg-primary text-on-primary transition-all shadow-sm">Weekly</button>
+<button class="px-6 py-2 rounded-full font-label-md text-label-md text-on-surface-variant hover:bg-surface-variant transition-all">Monthly</button>
+</div>
+</div>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Main Trend Chart (Line Chart Simulation) -->
+<div class="md:col-span-8 glass-card rounded-xl p-md flex flex-col min-h-[400px]">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Calorie Adherence</h3>
+<p class="font-label-md text-label-md text-outline">Average 2,140 kcal / day</p>
+</div>
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span>
+<span class="font-label-md text-label-md">4% vs last week</span>
+</div>
+</div>
+<div class="flex-grow flex items-end justify-between gap-2 pt-4 relative">
+<!-- Synthetic Line Chart Visual -->
+<div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+<img alt="Abstract data visualization" class="w-full h-full object-cover grayscale" data-alt="A sophisticated and clean abstract data visualization background featuring soft, intersecting lines in muted earth tones like olive and charcoal. The style is minimalist and editorial, evoking the feel of a high-end health journal. Lighting is bright and airy with an focus on organic textures and calm, professional aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdBshql7855AYi4vom4RICdsUguYLnqON-tBkDMRNxKxl7IZWz88JDE_Tyf7usEGcBPTJ_PeSdYNY5Ql5cegT8pVe1eXTZIbG9SLyk-dpbFwg4bH03o13SON1XEnlprxtEu3KfASKNpGuYFBvQNNTXOWv4W2BpI2tyr8qT5PKR6XoRRKE6C8Rpb4qepZfdodvLwwU7S7vRj9UGb7_HBco-E2kwinpQW-yfoE-WbfOyuzI0xwpOVZTmyR3qaODANz-7KfLf_fxHTGhQ"/>
+</div>
+<!-- Column Bars -->
+<div class="flex-1 group relative h-full flex flex-col justify-end items-center">
+<div class="w-full max-w-[40px] bg-tertiary-fixed-dim rounded-t-lg bar-transition h-[65%] group-hover:bg-primary transition-colors"></div>
+<span class="mt-4 font-label-sm text-label-sm text-outline">Mon</span>
+</div>
+<div class="flex-1 group relative h-full flex flex-col justify-end items-center">
+<div class="w-full max-w-[40px] bg-tertiary-fixed-dim rounded-t-lg bar-transition h-[80%] group-hover:bg-primary transition-colors"></div>
+<span class="mt-4 font-label-sm text-label-sm text-outline">Tue</span>
+</div>
+<div class="flex-1 group relative h-full flex flex-col justify-end items-center">
+<div class="w-full max-w-[40px] bg-primary rounded-t-lg bar-transition h-[45%] group-hover:bg-primary transition-colors"></div>
+<span class="mt-4 font-label-sm text-label-sm text-outline">Wed</span>
+</div>
+<div class="flex-1 group relative h-full flex flex-col justify-end items-center">
+<div class="w-full max-w-[40px] bg-tertiary-fixed-dim rounded-t-lg bar-transition h-[90%] group-hover:bg-primary transition-colors"></div>
+<span class="mt-4 font-label-sm text-label-sm text-outline">Thu</span>
+</div>
+<div class="flex-1 group relative h-full flex flex-col justify-end items-center">
+<div class="w-full max-w-[40px] bg-tertiary-fixed-dim rounded-t-lg bar-transition h-[70%] group-hover:bg-primary transition-colors"></div>
+<span class="mt-4 font-label-sm text-label-sm text-outline">Fri</span>
+</div>
+<div class="flex-1 group relative h-full flex flex-col justify-end items-center">
+<div class="w-full max-w-[40px] bg-tertiary-fixed-dim rounded-t-lg bar-transition h-[55%] group-hover:bg-primary transition-colors"></div>
+<span class="mt-4 font-label-sm text-label-sm text-outline">Sat</span>
+</div>
+<div class="flex-1 group relative h-full flex flex-col justify-end items-center">
+<div class="w-full max-w-[40px] bg-tertiary-fixed-dim rounded-t-lg bar-transition h-[60%] group-hover:bg-primary transition-colors"></div>
+<span class="mt-4 font-label-sm text-label-sm text-outline">Sun</span>
+</div>
+</div>
+</div>
+<!-- Macro breakdown Card -->
+<div class="md:col-span-4 glass-card rounded-xl p-md flex flex-col">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-lg">Macronutrients</h3>
+<div class="space-y-6">
+<div class="space-y-2">
+<div class="flex justify-between font-label-md text-label-md">
+<span class="text-on-surface">Protein</span>
+<span class="text-outline">120g / 150g</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary-container w-[80%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-label-md text-label-md">
+<span class="text-on-surface">Carbohydrates</span>
+<span class="text-outline">240g / 300g</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-fixed-dim w-[65%] rounded-full"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-label-md text-label-md">
+<span class="text-on-surface">Fats</span>
+<span class="text-outline">65g / 70g</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-fixed-dim w-[92%] rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-8">
+<div class="bg-surface-container-low rounded-lg p-4 border border-outline-variant/30">
+<div class="flex items-center gap-3 text-primary">
+<span class="material-symbols-outlined" data-icon="lightbulb">lightbulb</span>
+<p class="font-label-sm text-label-sm leading-relaxed">You're slightly low on proteins this week. Consider adding more legumes or lean poultry to your lunch.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Vitamins & Minerals Detailed Breakdown -->
+<div class="md:col-span-12 glass-card rounded-xl p-md">
+<div class="flex flex-col md:flex-row justify-between md:items-center mb-lg gap-4">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Micronutrient Balance</h3>
+<div class="flex gap-3 overflow-x-auto pb-2 md:pb-0 custom-scrollbar">
+<span class="px-4 py-1.5 rounded-full bg-secondary-container/10 text-on-secondary-container font-label-md text-label-md whitespace-nowrap">Vitamin A</span>
+<span class="px-4 py-1.5 rounded-full bg-primary-container/10 text-on-primary-fixed-variant font-label-md text-label-md whitespace-nowrap">Vitamin C</span>
+<span class="px-4 py-1.5 rounded-full bg-tertiary-container/10 text-on-tertiary-fixed-variant font-label-md text-label-md whitespace-nowrap">Magnesium</span>
+<span class="px-4 py-1.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-md text-label-md whitespace-nowrap">Iron</span>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-md">
+<!-- Micro Item -->
+<div class="flex flex-col items-center p-4 rounded-xl border border-faint hover:border-primary/30 transition-all group">
+<div class="w-16 h-16 rounded-full border-4 border-primary/20 flex items-center justify-center mb-3 relative">
+<span class="font-label-md text-label-md text-on-surface">88%</span>
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-primary" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-dasharray="175" stroke-dashoffset="21" stroke-width="4"></circle>
+</svg>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Vitamin D</span>
+<span class="font-label-sm text-label-sm text-outline">Target Met</span>
+</div>
+<!-- Micro Item -->
+<div class="flex flex-col items-center p-4 rounded-xl border border-faint hover:border-primary/30 transition-all group">
+<div class="w-16 h-16 rounded-full border-4 border-error/10 flex items-center justify-center mb-3 relative">
+<span class="font-label-md text-label-md text-on-surface">42%</span>
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-secondary" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-dasharray="175" stroke-dashoffset="101" stroke-width="4"></circle>
+</svg>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Calcium</span>
+<span class="font-label-sm text-label-sm text-secondary">Below Target</span>
+</div>
+<!-- Micro Item -->
+<div class="flex flex-col items-center p-4 rounded-xl border border-faint hover:border-primary/30 transition-all group">
+<div class="w-16 h-16 rounded-full border-4 border-primary/20 flex items-center justify-center mb-3 relative">
+<span class="font-label-md text-label-md text-on-surface">105%</span>
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-primary" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-dasharray="175" stroke-dashoffset="0" stroke-width="4"></circle>
+</svg>
+</div>
+<span class="font-label-md text-label-md text-on-surface">B12</span>
+<span class="font-label-sm text-label-sm text-outline">Optimal</span>
+</div>
+<!-- Micro Item -->
+<div class="flex flex-col items-center p-4 rounded-xl border border-faint hover:border-primary/30 transition-all group">
+<div class="w-16 h-16 rounded-full border-4 border-primary/20 flex items-center justify-center mb-3 relative">
+<span class="font-label-md text-label-md text-on-surface">76%</span>
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-primary-container" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-dasharray="175" stroke-dashoffset="42" stroke-width="4"></circle>
+</svg>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Zinc</span>
+<span class="font-label-sm text-label-sm text-outline">Healthy</span>
+</div>
+<!-- Micro Item -->
+<div class="flex flex-col items-center p-4 rounded-xl border border-faint hover:border-primary/30 transition-all group">
+<div class="w-16 h-16 rounded-full border-4 border-primary/20 flex items-center justify-center mb-3 relative">
+<span class="font-label-md text-label-md text-on-surface">92%</span>
+<svg class="absolute inset-0 w-full h-full -rotate-90">
+<circle class="text-primary" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-dasharray="175" stroke-dashoffset="14" stroke-width="4"></circle>
+</svg>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Potassium</span>
+<span class="font-label-sm text-label-sm text-outline">Target Met</span>
+</div>
+</div>
+</div>
+<!-- Asymmetric Editorial Card -->
+<div class="md:col-span-12 lg:col-span-12 bg-tertiary-fixed-dim/20 rounded-xl overflow-hidden flex flex-col md:flex-row min-h-[300px]">
+<div class="md:w-1/2 p-md md:p-lg flex flex-col justify-center">
+<h4 class="font-display-lg-mobile text-display-lg-mobile text-on-surface mb-md">The seasonal shift in your plate.</h4>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-lg">Your data shows a 15% increase in antioxidant-rich berries compared to last month. This shift is perfectly timed with the local harvest.</p>
+<button class="bg-primary text-on-primary px-8 py-4 rounded-full font-label-md text-label-md w-fit hover:bg-primary-container transition-colors active:scale-95 shadow-sm">
+            Read Full Analysis
+          </button>
+</div>
+<div class="md:w-1/2 h-64 md:h-auto overflow-hidden">
+<img alt="Seasonal fresh food arrangement" class="w-full h-full object-cover" data-alt="A beautifully styled flat lay of seasonal fresh fruits and vegetables, featuring deep red berries, vibrant leafy greens, and earthy root vegetables on a textured beige linen background. The lighting is soft and natural, coming from a side window to create gentle shadows and highlight the organic textures. The overall mood is sophisticated, wholesome, and editorial, perfectly matching a high-end wellness aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJdycalGzfzPcxXWgyahcnXicTnZgEvQhGmjdpxYBcnwmUPRVOEb0uzzK1EwqU0QizBWrQBCMvHlde1unJ667FuxLOEOVTvvOdpSottFGy7tZV8qT0mp99Bg33HCitLB9OLQlY5-D0pgkZGk6t_VMVWFiBC6E_WgTnWxLnSMCFlwLRjDbWp7r7lJ33twoZ24RUoktLUUEMOuKJrzzOtr19-FHnwQ3XA7JhzBIn3jVajD1oqpSjgQGz6eCTphApZwJ53NaXCQYceJLW"/>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-lowest shadow-lg rounded-t-xl md:hidden">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-label-sm text-label-sm mt-1">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="center_focus_strong">center_focus_strong</span>
+<span class="font-label-sm text-label-sm mt-1">Scanner</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary bg-primary-fixed rounded-full px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span class="font-label-sm text-label-sm mt-1">Diary</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container-high transition-all px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm mt-1">Settings</span>
+</a>
+</nav>
+<!-- Desktop Side/Top Navigation Shell -->
+<div class="hidden md:flex fixed top-0 left-0 w-full h-16 z-[60] pointer-events-none">
+<div class="max-w-[1140px] mx-auto w-full px-container-margin flex justify-end items-center pointer-events-auto h-full">
+<nav class="flex items-center gap-8">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Dashboard</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Scanner</a>
+<a class="font-label-md text-label-md text-primary font-bold transition-colors" href="#">Diary</a>
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-secondary transition-colors" href="#">Settings</a>
+</nav>
+</div>
+</div>
+<script>
+    // Simple intersection observer to trigger chart animations
+    const observerOptions = {
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const bars = entry.target.querySelectorAll('.bar-transition');
+          bars.forEach((bar, index) => {
+            const originalHeight = bar.style.height;
+            bar.style.height = '0';
+            setTimeout(() => {
+              bar.style.height = bar.getAttribute('data-height') || originalHeight;
+            }, index * 100);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.glass-card').forEach(card => {
+      const bars = card.querySelectorAll('.bar-transition');
+      bars.forEach(bar => {
+        bar.setAttribute('data-height', bar.style.height);
+      });
+      observer.observe(card);
+    });
+
+    // Handle micro-interactions
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('mousedown', () => btn.classList.add('scale-95'));
+      btn.addEventListener('mouseup', () => btn.classList.remove('scale-95'));
+      btn.addEventListener('mouseleave', () => btn.classList.remove('scale-95'));
+    });
+  </script>
+</body></html>

@@ -1,0 +1,326 @@
+#Meal diary
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>FoodVision AI - Meal Diary</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#ffb4a5",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#fcf9f8",
+                    "primary-fixed": "#d7ec95",
+                    "tertiary-fixed": "#f3e0c0",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#732010",
+                    "primary": "#52621c",
+                    "surface": "#fcf9f8",
+                    "tertiary-container": "#817358",
+                    "surface-container-high": "#eae7e7",
+                    "outline-variant": "#c6c8b6",
+                    "tertiary-fixed-dim": "#d6c4a5",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#161e00",
+                    "inverse-surface": "#303030",
+                    "secondary": "#9f402d",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f3f0f0",
+                    "on-tertiary-fixed": "#231a06",
+                    "on-tertiary-fixed-variant": "#51452d",
+                    "primary-fixed-dim": "#bbcf7c",
+                    "surface-variant": "#e4e2e1",
+                    "on-primary-container": "#fbffe4",
+                    "surface-tint": "#54651e",
+                    "inverse-primary": "#bbcf7c",
+                    "outline": "#767869",
+                    "surface-bright": "#fcf9f8",
+                    "secondary-container": "#fd876f",
+                    "surface-dim": "#dcd9d9",
+                    "surface-container-highest": "#e4e2e1",
+                    "tertiary": "#675a41",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f6f3f2",
+                    "on-secondary-fixed": "#3e0500",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#46483b",
+                    "on-tertiary-container": "#fffbff",
+                    "on-primary-fixed-variant": "#3d4c05",
+                    "on-surface": "#1b1c1c",
+                    "secondary-fixed": "#ffdad3",
+                    "on-background": "#1b1c1c",
+                    "primary-container": "#6a7c32",
+                    "surface-container": "#f0eded",
+                    "on-secondary-fixed-variant": "#802918"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "64px",
+                    "sm": "12px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "container-margin": "24px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Libre Caslon Text"],
+                    "body-md": ["DM Sans"],
+                    "headline-sm": ["Libre Caslon Text"],
+                    "label-md": ["DM Sans"],
+                    "headline-md": ["Libre Caslon Text"],
+                    "label-sm": ["DM Sans"],
+                    "display-lg": ["Libre Caslon Text"],
+                    "body-lg": ["DM Sans"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        body {
+            -webkit-tap-highlight-color: transparent;
+            background-color: #FAF9F6; /* Fixed Stone Background from Style Guidance */
+        }
+        .meal-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .meal-card:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface antialiased">
+<!-- TopAppBar from JSON -->
+<header class="bg-background dark:bg-background flex justify-between items-center w-full px-container-margin h-16 max-w-[1140px] mx-auto sticky top-0 z-40">
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tight">FoodVision AI</h1>
+<div class="flex items-center gap-4">
+<button class="active:scale-95 transition-transform duration-150 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<main class="max-w-[1140px] mx-auto px-container-margin pt-base pb-32">
+<!-- Date Switcher & Summary Section -->
+<section class="py-lg flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<p class="font-label-md text-label-md text-outline uppercase tracking-widest mb-xs">Today</p>
+<h2 class="font-headline-md text-headline-md text-on-surface">September 24th</h2>
+</div>
+<!-- Daily Nutrition Summary Bento Card -->
+<div class="bg-surface-container-lowest border border-surface-variant p-md rounded-xl flex items-center gap-lg shadow-[0_20px_30px_rgba(27,28,28,0.04)]">
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-outline">Target</span>
+<span class="font-headline-sm text-headline-sm text-primary">2,200</span>
+</div>
+<div class="w-px h-10 bg-outline-variant"></div>
+<div class="flex flex-col items-center">
+<span class="font-label-sm text-label-sm text-outline">Remaining</span>
+<span class="font-headline-sm text-headline-sm text-secondary">840</span>
+</div>
+<button class="bg-primary hover:bg-primary-container text-white px-md py-sm rounded-lg transition-colors flex items-center gap-xs shadow-md">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+<span class="font-label-md text-label-md">Add Meal</span>
+</button>
+</div>
+</section>
+<!-- Chronological Meal List -->
+<div class="space-y-lg relative">
+<!-- Timeline Line (Visual) -->
+<div class="absolute left-[23px] top-0 bottom-0 w-[1px] bg-outline-variant/30 hidden md:block"></div>
+<!-- Breakfast -->
+<div class="relative pl-0 md:pl-xl">
+<!-- Timeline Dot -->
+<div class="absolute left-[18px] top-4 w-3 h-3 rounded-full bg-primary-fixed border-2 border-primary hidden md:block"></div>
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Breakfast</h3>
+<span class="font-label-md text-label-md text-outline">08:30 AM</span>
+</div>
+<div class="meal-card bg-surface-container-lowest rounded-xl p-md border border-surface-variant shadow-[0_20px_30px_rgba(27,28,28,0.04)] flex flex-col sm:flex-row gap-md items-center">
+<div class="w-full sm:w-24 h-24 rounded-lg overflow-hidden shrink-0">
+<img alt="Breakfast Bowl" class="w-full h-full object-cover" data-alt="A top-down shot of a ceramic bowl filled with bright Greek yogurt, topped with a spill of vibrant blueberries and granola. The scene is set on a minimalist, textured stone surface with soft morning light streaming in from the side, creating long gentle shadows. The color palette is high-key and serene, focusing on white, cream, and deep berry hues for a high-end wellness aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXVmsvFMBkbSq4ENwPqVM9pIXnvEN5U6eBI31TezJYvJeu20TiYQuKtgyE4YfVRe1NlhIetUT_eSzNGHa-1QdqyINIntDlLXSwUtGN1MYYD3TLGJhRVyE4SJd7L96uZtUlLI0bUq-7LdZZuaDFJp11w6wsnAJ6b_kTNc_GAyckBEWzCTyPffTyGliw_8Mb1U-_i9rOY4dYo3_DxCJwsx61QolttQ38ZG6g-IRqAmuoJD2kjgiiosfuZvFKkhagzhE5CzJSvCHgzqk5"/>
+</div>
+<div class="flex-grow text-center sm:text-left">
+<h4 class="font-body-lg text-body-lg font-bold text-on-surface">Greek Yogurt &amp; Honey Bowl</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">250g Greek Yogurt, 10g Honey, Mixed Berries</p>
+</div>
+<div class="text-center sm:text-right shrink-0">
+<div class="bg-primary-fixed/30 px-sm py-xs rounded-full inline-block">
+<span class="font-label-md text-label-md text-primary-container font-bold">420 kcal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Lunch -->
+<div class="relative pl-0 md:pl-xl">
+<div class="absolute left-[18px] top-4 w-3 h-3 rounded-full bg-outline-variant border-2 border-outline hidden md:block"></div>
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Lunch</h3>
+<span class="font-label-md text-label-md text-outline">12:45 PM</span>
+</div>
+<div class="meal-card bg-surface-container-lowest rounded-xl p-md border border-surface-variant shadow-[0_20px_30px_rgba(27,28,28,0.04)] flex flex-col sm:flex-row gap-md items-center">
+<div class="w-full sm:w-24 h-24 rounded-lg overflow-hidden shrink-0">
+<img alt="Superfood Salad" class="w-full h-full object-cover" data-alt="An editorial style overhead photo of a sophisticated Mediterranean salad in a matte white ceramic plate. The salad features deep green kale, roasted sweet potatoes, and white chickpeas, sprinkled with pomegranate seeds. Lighting is soft and diffuse, highlighting the natural textures of the ingredients against a pale oat-colored stone background. The mood is mindful, upscale, and nutrient-dense." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUlJUuh6GjVGS6YJkO_kZMCQSYpYxX1p1UO4eT-TbGa7h-aHMzBQiZveSlEZHyq_fqc3plf45TQJaXlUU2Lk3SxsKVAwliNtMt7678i0Z5BpvqoOwwAvuCF5nefAHj34uGLmJhPk9dPxygVLbTAwKjSK0k2nRdnVWb_EIJdJCouztd4QWGMgZ0TttOdN5-JmFPZ1Fb0iswYDhZ5EReiKStBMdPvXWVCRjEf-0xHKCpJSbUSwMnGqWI_R5HD0mUF5HEJS9Qj6ewmU62"/>
+</div>
+<div class="flex-grow text-center sm:text-left">
+<h4 class="font-body-lg text-body-lg font-bold text-on-surface">Roasted Sweet Potato &amp; Kale Salad</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Kale, Sweet Potato, Chickpeas, Tahini Dressing</p>
+</div>
+<div class="text-center sm:text-right shrink-0">
+<div class="bg-primary-fixed/30 px-sm py-xs rounded-full inline-block">
+<span class="font-label-md text-label-md text-primary-container font-bold">580 kcal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Snack -->
+<div class="relative pl-0 md:pl-xl">
+<div class="absolute left-[18px] top-4 w-3 h-3 rounded-full bg-tertiary-fixed border-2 border-tertiary hidden md:block"></div>
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Snack</h3>
+<span class="font-label-md text-label-md text-outline">03:15 PM</span>
+</div>
+<div class="meal-card bg-surface-container-lowest rounded-xl p-md border border-surface-variant shadow-[0_20px_30px_rgba(27,28,28,0.04)] flex flex-col sm:flex-row gap-md items-center">
+<div class="w-full sm:w-24 h-24 rounded-lg overflow-hidden shrink-0">
+<img alt="Almonds" class="w-full h-full object-cover" data-alt="A macro shot of a handful of raw organic almonds resting on a textured linen napkin. The colors are warm and earthy, using a palette of oat, charcoal, and warm tan. Soft, natural lighting from a nearby window creates gentle highlights on the smooth surface of the nuts. The overall atmosphere is artisanal and minimalist, emphasizing high-quality ingredients and sustainable health." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlt73ck7ehSYPkJireZBZAV0P5pmM1xoy6497daOO4CAX2NzRpDm_K-8gCvjJtrUq0xFr9VxqE9Pd5G2d3ddblkoJtOuzCm4xegdz14JzPtttw-SuBidaMa4uFtgCNwGJvIKThJ4WYFR8F2s3XaDk4iiPLe_jy2UDHRLkiP2wj9VT4fyKN_xGt9WX5iUSlookj4W-eiIvyCu9x1LNWhaOf9bnNMgI8uBMeTw8_MsbHDO4fKR8WU7wDMielnv8folyqqKBxzEZSV9ZW"/>
+</div>
+<div class="flex-grow text-center sm:text-left">
+<h4 class="font-body-lg text-body-lg font-bold text-on-surface">Raw Organic Almonds</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Small handful (approx 15 pieces)</p>
+</div>
+<div class="text-center sm:text-right shrink-0">
+<div class="bg-primary-fixed/30 px-sm py-xs rounded-full inline-block">
+<span class="font-label-md text-label-md text-primary-container font-bold">160 kcal</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Dinner (Upcoming) -->
+<div class="relative pl-0 md:pl-xl opacity-60 grayscale-[0.5]">
+<div class="absolute left-[18px] top-4 w-3 h-3 rounded-full bg-outline-variant border-2 border-outline-variant hidden md:block"></div>
+<div class="flex items-center justify-between mb-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Dinner</h3>
+<span class="font-label-md text-label-md text-outline">Not logged</span>
+</div>
+<button class="w-full meal-card bg-surface-container-low rounded-xl p-xl border border-dashed border-outline-variant flex flex-col items-center justify-center gap-sm hover:bg-surface-variant transition-colors group">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary" data-icon="restaurant">restaurant</span>
+</div>
+<p class="font-label-md text-label-md text-outline">Tap to log dinner</p>
+</button>
+</div>
+</div>
+<!-- Nutrient Progress Chips -->
+<section class="mt-xl grid grid-cols-2 md:grid-cols-4 gap-md">
+<div class="bg-surface-container-lowest p-md rounded-xl border border-surface-variant">
+<p class="font-label-sm text-label-sm text-outline mb-xs">Protein</p>
+<div class="flex items-end gap-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">62g</span>
+<span class="font-label-sm text-label-sm text-outline mb-1">/ 120g</span>
+</div>
+<div class="mt-sm h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[52%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-surface-variant">
+<p class="font-label-sm text-label-sm text-outline mb-xs">Carbs</p>
+<div class="flex items-end gap-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">145g</span>
+<span class="font-label-sm text-label-sm text-outline mb-1">/ 250g</span>
+</div>
+<div class="mt-sm h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[58%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-surface-variant">
+<p class="font-label-sm text-label-sm text-outline mb-xs">Fats</p>
+<div class="flex items-end gap-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">40g</span>
+<span class="font-label-sm text-label-sm text-outline mb-1">/ 70g</span>
+</div>
+<div class="mt-sm h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[57%]"></div>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-surface-variant">
+<p class="font-label-sm text-label-sm text-outline mb-xs">Fiber</p>
+<div class="flex items-end gap-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface">18g</span>
+<span class="font-label-sm text-label-sm text-outline mb-1">/ 30g</span>
+</div>
+<div class="mt-sm h-1.5 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary-fixed-dim w-[60%]"></div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar from JSON -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-lowest dark:bg-surface-dim shadow-[0_-4px_20px_rgba(27,28,28,0.04)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="center_focus_strong">center_focus_strong</span>
+<span class="font-label-sm text-label-sm">Scanner</span>
+</a>
+<!-- Active Tab: Diary -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-fixed dark:bg-primary-container rounded-full px-4 py-1 scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-label-sm text-label-sm">Diary</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<!-- Floating Action Button (FAB) logic -->
+<button class="fixed right-6 bottom-24 w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform duration-150 z-40 md:hidden">
+<span class="material-symbols-outlined text-[32px]" data-icon="add">add</span>
+</button>
+<script>
+        // Micro-interactions for meal cards
+        document.querySelectorAll('.meal-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // Future detail view logic
+                console.log('Meal clicked');
+            });
+        });
+    </script>
+</body></html>

@@ -1,0 +1,425 @@
+#Farm-to-table...
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>FoodVision AI - Farm-to-Table Traceability</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration (Provided) -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e4e2e1",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#bbcf7c",
+                        "on-secondary-container": "#732010",
+                        "surface-container-high": "#eae7e7",
+                        "inverse-on-surface": "#f3f0f0",
+                        "secondary": "#9f402d",
+                        "on-primary-container": "#fbffe4",
+                        "on-surface": "#1b1c1c",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#54651e",
+                        "on-surface-variant": "#46483b",
+                        "primary-fixed": "#d7ec95",
+                        "tertiary-fixed": "#f3e0c0",
+                        "on-secondary-fixed": "#3e0500",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#161e00",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#bbcf7c",
+                        "secondary-fixed-dim": "#ffb4a5",
+                        "on-tertiary-fixed": "#231a06",
+                        "on-tertiary-container": "#fffbff",
+                        "primary-container": "#6a7c32",
+                        "on-secondary-fixed-variant": "#802918",
+                        "primary": "#52621c",
+                        "surface-dim": "#dcd9d9",
+                        "surface-container-highest": "#e4e2e1",
+                        "surface-bright": "#fcf9f8",
+                        "tertiary-fixed-dim": "#d6c4a5",
+                        "outline-variant": "#c6c8b6",
+                        "surface-container": "#f0eded",
+                        "tertiary": "#675a41",
+                        "surface": "#fcf9f8",
+                        "background": "#fcf9f8",
+                        "on-error-container": "#93000a",
+                        "on-background": "#1b1c1c",
+                        "secondary-fixed": "#ffdad3",
+                        "outline": "#767869",
+                        "inverse-surface": "#303030",
+                        "on-primary-fixed-variant": "#3d4c05",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed-variant": "#51452d",
+                        "surface-container-low": "#f6f3f2",
+                        "tertiary-container": "#817358",
+                        "secondary-container": "#fd876f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "md": "24px",
+                        "lg": "40px",
+                        "base": "8px",
+                        "xl": "64px",
+                        "gutter": "16px",
+                        "container-margin": "24px",
+                        "sm": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Libre Caslon Text", "serif"],
+                        "body-lg": ["DM Sans", "sans-serif"],
+                        "display-lg-mobile": ["Libre Caslon Text", "serif"],
+                        "body-md": ["DM Sans", "sans-serif"],
+                        "label-md": ["DM Sans", "sans-serif"],
+                        "headline-md": ["Libre Caslon Text", "serif"],
+                        "label-sm": ["DM Sans", "sans-serif"],
+                        "display-lg": ["Libre Caslon Text", "serif"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "display-lg-mobile": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            font-family: 'DM Sans', sans-serif;
+            /* Tactile, ambient shadows for the entire canvas */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Ambient, soft shadows for tactile feel */
+        .shadow-tactile {
+            box-shadow: 0 10px 30px -10px rgba(27, 28, 28, 0.05);
+        }
+        
+        .shadow-tactile-lg {
+            box-shadow: 0 20px 40px -10px rgba(27, 28, 28, 0.08);
+        }
+
+        /* Timeline connector line */
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 24px;
+            bottom: -24px;
+            width: 1px;
+            background-color: theme('colors.outline-variant');
+            z-index: 0;
+        }
+        
+        /* Hide line on last item */
+        .timeline-item:last-child .timeline-line::before {
+            display: none;
+        }
+        
+        /* Custom scrollbar for horizontal lists */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen pb-[90px] md:pb-0">
+<!-- TopAppBar (Web & Mobile, shared JSON spec) -->
+<header class="bg-background dark:bg-background docked full-width top-0 z-40 sticky top-0 bg-background dark:bg-background flat no shadows">
+<div class="flex justify-between items-center w-full px-container-margin h-16 max-w-[1140px] mx-auto">
+<!-- Back Button for transactional/sub-page feel (though instructions say hide nav if it's a dead end, this is a deep dive traceability screen, so we might keep the top bar for branding but add a back action) -->
+<button aria-label="Go back" class="flex items-center text-on-surface-variant hover:text-primary transition-colors md:hidden">
+<span class="material-symbols-outlined" style="font-size: 24px;">arrow_back</span>
+</button>
+<div class="font-display-lg-mobile text-display-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tight hidden md:block">
+                FoodVision AI
+            </div>
+<!-- Mobile Brand (Centered if back button present) -->
+<div class="font-display-lg-mobile text-display-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tight text-center flex-1 md:hidden">
+                FoodVision
+            </div>
+<div class="flex items-center gap-4">
+<button aria-label="Search" class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors">
+<!-- Search hidden per JSON, but we'll leave space or actions if needed. JSON says search_bar: hidden -->
+</button>
+<button aria-label="Account" class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors">
+<span class="material-symbols-outlined" style="font-size: 28px;">account_circle</span>
+</button>
+</div>
+</div>
+<!-- Desktop Navigation Cluster (replaces BottomNav on Web) -->
+<nav class="hidden md:flex justify-center border-b border-surface-variant/30 pb-4">
+<ul class="flex space-x-lg">
+<li><a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors font-label-md text-label-md" href="#">Dashboard</a></li>
+<li><a class="text-primary dark:text-primary-fixed-dim font-bold font-label-md text-label-md" href="#">Scanner</a></li>
+<li><a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors font-label-md text-label-md" href="#">Diary</a></li>
+<li><a class="text-on-surface-variant dark:text-on-surface-variant hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors font-label-md text-label-md" href="#">Settings</a></li>
+</ul>
+</nav>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-[1140px] mx-auto px-container-margin md:mt-lg mb-xl">
+<!-- Context Header / Breadcrumb -->
+<div class="mb-lg pt-md">
+<div class="flex items-center gap-xs text-on-surface-variant mb-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Meal Scan #4812</span>
+<span class="material-symbols-outlined text-[16px] text-outline-variant">chevron_right</span>
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-primary">Ingredient Origin</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-background mb-xs">Organic Quinoa</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                        Traced back to its source in the Andean highlands. Verified organic, fair-trade, and regeneratively farmed.
+                    </p>
+</div>
+<div class="flex items-center gap-sm">
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wide">Confidence Score</span>
+<span class="font-body-lg text-body-lg text-primary font-bold">99.8%</span>
+</div>
+<div class="h-10 w-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bento Grid Layout for Traceability Data -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-md md:gap-lg">
+<!-- Left Column: The Journey Map (Spans 8 cols on desktop) -->
+<div class="md:col-span-8 flex flex-col gap-md">
+<!-- Map / Hero Visual -->
+<div class="relative w-full h-[300px] md:h-[400px] rounded-xl overflow-hidden shadow-tactile border border-surface-variant/50">
+<!-- Map placeholder image -->
+<img alt="Satellite view of Andean highlands" class="w-full h-full object-cover" data-alt="A highly detailed, high-resolution aerial or satellite view of lush, terraced farmland in the Andean highlands. The landscape is a rich tapestry of deep earthy greens, muted browns, and pale stone textures, reflecting a natural, organic farming environment. Soft, diffuse sunlight casts gentle shadows across the undulating hills, creating a sense of calm and authenticity. The overall aesthetic is grounded, premium, and documentary-style, fitting perfectly within a minimalist, wellness-focused UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV0gYNohcPbTzvsm5FSO2gtjg4shryNNWT183uU8JRSkquTRFeZvnklSSDaExJCAxrulwhdDTBqtIOIYQXu06xgHgmmrm6RFUPl2Nf9HnSTBwD0gZoTgW7EPfVKbo456nnzd4XFfaDIjkcMIcdBSvOp-LSs9mkIP-HwmGfPC8LCb07F7DC1WORGXUrRvZJFWp7v9-FP1hou3YxLv3gv1KFTOgB9LdNKc3xgA0pLItT7h2FebT902kq5KuizbQ2bwDwSBNraaUQTnvp"/>
+<!-- Overlay Map Markers (Simulated) -->
+<div class="absolute inset-0 bg-gradient-to-t from-on-background/40 to-transparent"></div>
+<div class="absolute bottom-md left-md right-md flex items-end justify-between">
+<div class="bg-surface-container-lowest/90 backdrop-blur-sm px-sm py-xs rounded-lg border border-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary text-[18px]">location_on</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface">Origin Point</p>
+<p class="font-body-md text-body-md font-medium text-on-background">Puno Region, Peru</p>
+</div>
+</div>
+<div class="bg-primary/90 backdrop-blur-sm px-sm py-xs rounded-lg flex items-center gap-xs text-on-primary shadow-lg">
+<span class="material-symbols-outlined text-[18px]">distance</span>
+<div>
+<p class="font-label-sm text-label-sm text-primary-fixed opacity-80">Food Miles</p>
+<p class="font-body-md text-body-md font-medium">4,210 mi</p>
+</div>
+</div>
+</div>
+</div>
+<!-- The Timeline -->
+<div class="bg-surface-container-lowest rounded-xl p-md md:p-lg shadow-tactile border border-surface-variant/50">
+<h2 class="font-headline-sm text-headline-sm text-on-background mb-lg flex items-center gap-sm">
+<span class="material-symbols-outlined text-tertiary">route</span>
+                        Supply Chain Journey
+                    </h2>
+<div class="relative">
+<!-- Step 1: Farm -->
+<div class="timeline-item relative flex gap-md mb-lg">
+<div class="timeline-line relative flex flex-col items-center z-10">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center border-4 border-surface-container-lowest shadow-sm z-10">
+<span class="material-symbols-outlined text-primary text-[20px]">agriculture</span>
+</div>
+</div>
+<div class="flex-1 pt-1 pb-md">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-xs">Step 01 • Harvest</span>
+<h3 class="font-body-lg text-body-lg font-medium text-on-background mb-xs">Valle Sagrado Co-op</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-sm">Hand-harvested using traditional methods to preserve soil integrity and grain quality.</p>
+<div class="flex flex-wrap gap-xs">
+<span class="px-xs py-[2px] bg-tertiary-fixed/30 text-tertiary text-label-sm font-label-sm rounded-full border border-tertiary-fixed">Oct 12, 2023</span>
+<span class="px-xs py-[2px] bg-secondary-fixed/30 text-secondary text-label-sm font-label-sm rounded-full border border-secondary-fixed">Batch #Q-882</span>
+</div>
+</div>
+</div>
+<!-- Step 2: Processing -->
+<div class="timeline-item relative flex gap-md mb-lg">
+<div class="timeline-line relative flex flex-col items-center z-10">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center border-4 border-surface-container-lowest shadow-sm z-10">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">factory</span>
+</div>
+</div>
+<div class="flex-1 pt-1 pb-md">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-xs">Step 02 • Washing &amp; Milling</span>
+<h3 class="font-body-lg text-body-lg font-medium text-on-background mb-xs">Andean Naturals Facility</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-sm">Saponin removal via water-efficient dry friction method, followed by optical sorting.</p>
+<span class="px-xs py-[2px] bg-surface-variant text-on-surface-variant text-label-sm font-label-sm rounded-full border border-outline-variant inline-block">Nov 05, 2023</span>
+</div>
+</div>
+<!-- Step 3: Distribution -->
+<div class="timeline-item relative flex gap-md mb-lg">
+<div class="timeline-line relative flex flex-col items-center z-10">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center border-4 border-surface-container-lowest shadow-sm z-10">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">local_shipping</span>
+</div>
+</div>
+<div class="flex-1 pt-1 pb-md">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-xs">Step 03 • Transit</span>
+<h3 class="font-body-lg text-body-lg font-medium text-on-background mb-xs">Ocean Freight to Port of LA</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-sm">Transported via carbon-offset shipping partners to minimize environmental impact.</p>
+<span class="px-xs py-[2px] bg-surface-variant text-on-surface-variant text-label-sm font-label-sm rounded-full border border-outline-variant inline-block">Dec 14, 2023</span>
+</div>
+</div>
+<!-- Step 4: Retail/Plate -->
+<div class="timeline-item relative flex gap-md">
+<div class="timeline-line relative flex flex-col items-center z-10">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center border-4 border-surface-container-lowest shadow-sm z-10">
+<span class="material-symbols-outlined text-on-primary text-[20px]">restaurant</span>
+</div>
+</div>
+<div class="flex-1 pt-1">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-xs">Step 04 • Your Plate</span>
+<h3 class="font-body-lg text-body-lg font-medium text-on-background mb-xs">Local Market Purchase</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">Scanned today in your meal.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Grower Profile & Metrics (Spans 4 cols on desktop) -->
+<div class="md:col-span-4 flex flex-col gap-md">
+<!-- Grower Profile Card -->
+<div class="bg-surface-container-lowest rounded-xl shadow-tactile border border-surface-variant/50 overflow-hidden flex flex-col h-full">
+<div class="h-48 relative">
+<img alt="Portrait of farmer" class="w-full h-full object-cover" data-alt="A professional, editorial-style portrait of an indigenous Andean farmer standing proudly in a field of quinoa. The lighting is natural and soft, highlighting the deep textures of their traditional clothing and the weathered, experienced lines on their face. The background consists of gently blurred, earthy green crops and a pale blue sky. The mood is dignified, authentic, and connected to the land, reflecting a high-quality wellness and sustainability brand aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASz6xOySxuST677cF2DJx9r-ys8xJ1V_mAQUk-i52bfmCpYb361RvUeZfPZ5gkkn5YoJpNEvkBbRZxbY95o9BN6irjcMLPqPttMZFwyi2jMQFw2S3Lpc9looyaVXHvNQ-d1bpJ84kMgkHgLAa5xuDdSA0SxPPyRPPf21LZJeeumtUgbsrkHMkDUZHhDYMjEUgPYEoyn_ULu1tXxLt-9QdXIh0sfsRJAsbuhhaYY1tYOTKIajPTSxSRUw9JK-EyxaTswL4GbgXrx9gb"/>
+<div class="absolute bottom-0 left-0 right-0 p-md bg-gradient-to-t from-on-background/80 to-transparent">
+<span class="font-label-sm text-label-sm text-primary-fixed uppercase tracking-wider block mb-xs drop-shadow-md">The Grower</span>
+<h3 class="font-headline-sm text-headline-sm text-on-primary drop-shadow-md">Mamani Family Farm</h3>
+</div>
+</div>
+<div class="p-md flex-1 flex flex-col justify-between">
+<div>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md italic">
+                                "We have cultivated this land for five generations, respecting the soil and the seasons just as our ancestors did."
+                            </p>
+<div class="space-y-sm mb-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline text-[20px]">eco</span>
+<span class="font-body-md text-body-md text-on-background">Regenerative Practices</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline text-[20px]">groups</span>
+<span class="font-body-md text-body-md text-on-background">Co-op Member since 1998</span>
+</div>
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-outline text-[20px]">water_drop</span>
+<span class="font-body-md text-body-md text-on-background">Rain-fed irrigation</span>
+</div>
+</div>
+</div>
+<!-- Certifications -->
+<div class="border-t border-surface-variant/50 pt-md mt-sm">
+<h4 class="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-sm">Certifications</h4>
+<div class="flex gap-sm">
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/30" title="USDA Organic">
+<span class="font-headline-sm text-[10px] font-bold text-primary text-center leading-tight">USDA<br/>ORG</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/30" title="Fair Trade Certified">
+<span class="font-headline-sm text-[10px] font-bold text-on-background text-center leading-tight">FAIR<br/>TRADE</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center border border-outline-variant/30" title="Non-GMO Project Verified">
+<span class="font-headline-sm text-[10px] font-bold text-secondary text-center leading-tight">NON<br/>GMO</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sustainability Metrics (Mini Bento) -->
+<div class="grid grid-cols-2 gap-md">
+<!-- Carbon Footprint -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-tactile border border-surface-variant/50 flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-primary text-[28px] mb-xs">co2</span>
+<h4 class="font-headline-md text-[24px] text-on-background font-bold mb-xs">1.2<span class="text-label-md text-on-surface-variant font-normal">kg</span></h4>
+<p class="font-label-sm text-label-sm text-outline">CO₂e per kg</p>
+<div class="w-full bg-surface-variant h-1 mt-sm rounded-full overflow-hidden">
+<div class="bg-primary w-[30%] h-full rounded-full"></div>
+</div>
+<p class="font-label-sm text-[10px] text-on-surface-variant mt-1">70% lower than avg</p>
+</div>
+<!-- Water Usage -->
+<div class="bg-surface-container-lowest rounded-xl p-md shadow-tactile border border-surface-variant/50 flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-[#4A90E2] text-[28px] mb-xs">water</span>
+<h4 class="font-headline-md text-[24px] text-on-background font-bold mb-xs">Low</h4>
+<p class="font-label-sm text-label-sm text-outline">Water Impact</p>
+<p class="font-label-sm text-[10px] text-on-surface-variant mt-sm px-2">100% rain-fed crop cycle</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile only, shared JSON spec) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 py-3 pb-safe bg-surface-container-lowest dark:bg-surface-dim shadow-[0_-4px_20px_rgba(27,28,28,0.04)] shadow-lg docked full-width bottom-0 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all w-16 h-14 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" style="font-size: 24px;">grid_view</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<!-- Active Tab: Scanner (Contextual mapping for Traceability) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-primary-fixed-dim bg-primary-fixed dark:bg-primary-container rounded-full px-4 py-1 hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-size: 24px;">center_focus_strong</span>
+<span class="font-label-sm text-label-sm">Scanner</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all w-16 h-14 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" style="font-size: 24px;">auto_stories</span>
+<span class="font-label-sm text-label-sm">Diary</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-all w-16 h-14 rounded-xl" href="#">
+<span class="material-symbols-outlined mb-1" style="font-size: 24px;">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+</nav>
+<script>
+        // Simple script to handle bottom nav active state interactions visually if clicked
+        document.addEventListener('DOMContentLoaded', () => {
+            const navItems = document.querySelectorAll('nav.md\\:hidden a');
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Just a visual demonstration of the interaction
+                    this.style.transform = 'scale(0.85)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(0.9)';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body></html>

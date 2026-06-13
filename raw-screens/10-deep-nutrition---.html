@@ -1,0 +1,379 @@
+#Deep nutrition...
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Deep Nutrition Analytics - FoodVision AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-variant": "#e4e2e1",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed-dim": "#bbcf7c",
+                      "on-secondary-container": "#732010",
+                      "surface-container-high": "#eae7e7",
+                      "inverse-on-surface": "#f3f0f0",
+                      "secondary": "#9f402d",
+                      "on-primary-container": "#fbffe4",
+                      "on-surface": "#1b1c1c",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "surface-tint": "#54651e",
+                      "on-surface-variant": "#46483b",
+                      "primary-fixed": "#d7ec95",
+                      "tertiary-fixed": "#f3e0c0",
+                      "on-secondary-fixed": "#3e0500",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed": "#161e00",
+                      "on-error": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "inverse-primary": "#bbcf7c",
+                      "secondary-fixed-dim": "#ffb4a5",
+                      "on-tertiary-fixed": "#231a06",
+                      "on-tertiary-container": "#fffbff",
+                      "primary-container": "#6a7c32",
+                      "on-secondary-fixed-variant": "#802918",
+                      "primary": "#52621c",
+                      "surface-dim": "#dcd9d9",
+                      "surface-container-highest": "#e4e2e1",
+                      "surface-bright": "#fcf9f8",
+                      "tertiary-fixed-dim": "#d6c4a5",
+                      "outline-variant": "#c6c8b6",
+                      "surface-container": "#f0eded",
+                      "tertiary": "#675a41",
+                      "surface": "#fcf9f8",
+                      "background": "#fcf9f8",
+                      "on-error-container": "#93000a",
+                      "on-background": "#1b1c1c",
+                      "secondary-fixed": "#ffdad3",
+                      "outline": "#767869",
+                      "inverse-surface": "#303030",
+                      "on-primary-fixed-variant": "#3d4c05",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed-variant": "#51452d",
+                      "surface-container-low": "#f6f3f2",
+                      "tertiary-container": "#817358",
+                      "secondary-container": "#fd876f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "md": "24px",
+                      "lg": "40px",
+                      "base": "8px",
+                      "xl": "64px",
+                      "gutter": "16px",
+                      "container-margin": "24px",
+                      "sm": "12px"
+              },
+              "fontFamily": {
+                      "headline-sm": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-lg": [
+                              "DM Sans"
+                      ],
+                      "display-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-md": [
+                              "DM Sans"
+                      ],
+                      "label-md": [
+                              "DM Sans"
+                      ],
+                      "headline-md": [
+                              "Libre Caslon Text"
+                      ],
+                      "label-sm": [
+                              "DM Sans"
+                      ],
+                      "display-lg": [
+                              "Libre Caslon Text"
+                      ]
+              },
+              "fontSize": {
+                      "headline-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "36px",
+                              {
+                                      "lineHeight": "44px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #FAF9F6; /* Surface Level 0 (Background) from style guidance */
+        }
+        
+        .shadow-soft {
+            box-shadow: 0 10px 30px rgba(27, 28, 28, 0.05); /* Very low opacity shadow per guidance */
+        }
+        
+        .border-editorial {
+            border-bottom: 1px solid #c6c8b6; /* outline-variant */
+        }
+        
+        /* Matte finish for charts placeholder */
+        .chart-placeholder {
+            background-image: repeating-linear-gradient(45deg, #f0eded 25%, transparent 25%, transparent 75%, #f0eded 75%, #f0eded), repeating-linear-gradient(45deg, #f0eded 25%, #fcf9f8 25%, #fcf9f8 75%, #f0eded 75%, #f0eded);
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
+            opacity: 0.5;
+        }
+        
+        /* Hand-drawn style path for SVG */
+        .path-organic {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawPath 3s ease forwards;
+        }
+        
+        @keyframes drawPath {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+</head>
+<body class="text-on-background antialiased min-h-screen flex flex-col pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-background dark:bg-background docked full-width top-0 sticky z-40 bg-background dark:bg-background flat no shadows flex justify-between items-center w-full px-container-margin h-16 max-w-[1140px] mx-auto border-b border-outline-variant/30">
+<div class="flex items-center gap-4">
+<!-- Back Button for Drill-down -->
+<button aria-label="Go back" class="p-2 -ml-2 rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<span class="font-display-lg-mobile text-display-lg-mobile md:font-display-lg md:text-display-lg text-primary dark:text-primary-fixed-dim tracking-tight">FoodVision AI</span>
+</div>
+<nav class="hidden md:flex gap-8 items-center">
+<!-- Assuming main nav context is suppressed on this drill-down task-focused page per guidance, but keeping the shell structure for visual anchor if needed. Actually, guidance says: "Automatic Suppression: You MUST exclude the navigation shell if the page intent is: ... Task-Focused: Any sub-page featuring a 'Close' or 'Back' action". I have added a Back action, so I will suppress the global nav links here to prioritize the canvas. -->
+</nav>
+<div class="flex items-center gap-4">
+<button class="hover:text-secondary dark:hover:text-secondary-fixed-dim transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow w-full max-w-[1140px] mx-auto px-container-margin py-lg flex flex-col gap-xl">
+<!-- Header Section -->
+<section class="max-w-2xl">
+<p class="font-label-md text-label-md text-tertiary uppercase tracking-widest mb-sm">Deep Analytics</p>
+<h1 class="font-headline-sm text-headline-sm-mobile md:font-headline-md md:text-headline-md text-on-surface mb-md">Nutrient Synergy &amp; Absorption</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                Your recent dietary patterns show an exceptional optimization of iron uptake, largely driven by your consistent pairing of dark leafy greens with citrus. This artisanal approach to combining ingredients significantly elevates your body's ability to utilize essential minerals.
+            </p>
+</section>
+<!-- Bento Grid Layout -->
+<section class="grid grid-cols-1 md:grid-cols-12 gap-md auto-rows-min">
+<!-- Synergy Highlight Card (Span 8) -->
+<div class="md:col-span-8 bg-surface-container-lowest rounded-xl shadow-soft p-lg border border-[#F2EFE9] flex flex-col relative overflow-hidden">
+<div class="flex justify-between items-start mb-lg relative z-10">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Iron + Vitamin C Synergy</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Observed absorption multiplier</p>
+</div>
+<div class="bg-primary-container/20 text-primary-container px-4 py-2 rounded-full font-label-md text-label-md flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+                        2.4x Increase
+                    </div>
+</div>
+<!-- Chart Area -->
+<div class="flex-grow min-h-[240px] relative w-full mt-md z-10 flex items-end pb-8">
+<!-- Custom SVG "hand-drawn" chart -->
+<svg class="w-full h-full absolute inset-0 overflow-visible" preserveaspectratio="none" viewbox="0 0 100 100">
+<defs>
+<lineargradient id="sageGrad" x1="0%" x2="0%" y1="100%" y2="0%">
+<stop offset="0%" stop-color="#bbcf7c" stop-opacity="0.1"></stop>
+<stop offset="100%" stop-color="#bbcf7c" stop-opacity="0.4"></stop>
+</lineargradient>
+</defs>
+<!-- Baseline -->
+<path d="M0,80 Q20,85 40,75 T100,80" fill="none" stroke="#767869" stroke-dasharray="2 2" stroke-width="0.5"></path>
+<!-- Synergy Area -->
+<path d="M0,100 L0,70 Q20,60 40,40 T80,20 L100,15 L100,100 Z" fill="url(#sageGrad)" opacity="0.8"></path>
+<!-- Synergy Line -->
+<path class="path-organic" d="M0,70 Q20,60 40,40 T80,20 L100,15" fill="none" stroke="#52621c" stroke-linecap="round" stroke-width="2"></path>
+<!-- Data Points -->
+<circle cx="40" cy="40" fill="#9f402d" r="2"></circle>
+<circle cx="80" cy="20" fill="#9f402d" r="2"></circle>
+</svg>
+<!-- Overlay Labels -->
+<div class="absolute left-[35%] top-[25%] bg-surface-container-lowest/90 backdrop-blur-sm border border-outline-variant px-3 py-1.5 rounded-lg text-xs font-label-sm shadow-sm">
+                        Kale + Lemon added
+                    </div>
+</div>
+<!-- Decorative element reflecting "nature/organic" -->
+<div class="absolute -right-10 -bottom-10 opacity-5 pointer-events-none">
+<span class="material-symbols-outlined text-[200px]">eco</span>
+</div>
+</div>
+<!-- Nutrient Density Score (Span 4) -->
+<div class="md:col-span-4 bg-primary text-on-primary rounded-xl shadow-soft p-lg flex flex-col justify-between relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="font-label-md text-label-md uppercase tracking-wider text-primary-fixed-dim opacity-90">Personalized Density Score</h3>
+<div class="mt-xl flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg">94</span>
+<span class="font-body-md text-body-md text-primary-fixed-dim">/100</span>
+</div>
+<p class="font-body-md text-body-md mt-sm opacity-80">Top 5% for your metabolic profile.</p>
+</div>
+<div class="mt-xl relative z-10 border-t border-primary-fixed-dim/30 pt-md">
+<p class="font-label-sm text-label-sm text-primary-fixed-dim mb-2">Key Drivers</p>
+<ul class="space-y-2">
+<li class="flex items-center gap-2 text-sm font-body-md"><span class="w-1.5 h-1.5 rounded-full bg-secondary-fixed"></span> High Magnesium Bioavailability</li>
+<li class="flex items-center gap-2 text-sm font-body-md"><span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed"></span> Optimal Omega-3 Ratio</li>
+</ul>
+</div>
+<!-- Abstract shape in background -->
+<div class="absolute top-0 right-0 w-64 h-64 bg-surface-tint rounded-full mix-blend-multiply filter blur-3xl opacity-50 transform translate-x-1/3 -translate-y-1/3"></div>
+</div>
+<!-- Metabolic Impact Text/Editorial (Span 6) -->
+<div class="md:col-span-6 bg-surface-container-lowest rounded-xl shadow-soft p-lg border border-[#F2EFE9]">
+<div class="flex items-center gap-3 mb-md border-editorial pb-sm">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">vital_signs</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Metabolic Curve Analysis</h3>
+</div>
+<div class="prose prose-stone">
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-4">
+                        The integration of complex carbohydrates alongside high-quality plant proteins has smoothed your post-prandial glucose response significantly. The 'spikes' typical of simpler meals are absent, replaced by a gentle, sustained curve.
+                    </p>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                        This indicates that your digestive system is pacing the breakdown of nutrients effectively, ensuring a steady release of energy and minimizing insulin fatigue.
+                    </p>
+</div>
+<button class="mt-lg w-full bg-primary text-on-primary py-4 px-6 rounded-lg font-label-md text-label-md border border-[#3d4c05] hover:bg-surface-tint transition-colors flex items-center justify-center gap-2">
+                    View Detailed Logs <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<!-- Absorption Micro-Interactions (Span 6) -->
+<div class="md:col-span-6 bg-surface-container-lowest rounded-xl shadow-soft p-lg border border-[#F2EFE9]">
+<h3 class="font-label-md text-label-md uppercase text-tertiary tracking-wider mb-lg">Micro-Nutrient Pathways</h3>
+<div class="space-y-6">
+<!-- Pathway Item -->
+<div class="group cursor-pointer">
+<div class="flex justify-between items-end mb-2">
+<span class="font-body-lg text-body-lg text-on-surface font-medium flex items-center gap-2">
+                                Calcium <span class="material-symbols-outlined text-sm text-outline">sync_alt</span> Vitamin D
+                            </span>
+<span class="font-label-sm text-label-sm text-secondary">Optimized</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[85%] rounded-full group-hover:bg-secondary-container transition-colors duration-300"></div>
+</div>
+</div>
+<!-- Pathway Item -->
+<div class="group cursor-pointer">
+<div class="flex justify-between items-end mb-2">
+<span class="font-body-lg text-body-lg text-on-surface font-medium flex items-center gap-2">
+                                Curcumin <span class="material-symbols-outlined text-sm text-outline">sync_alt</span> Piperine
+                            </span>
+<span class="font-label-sm text-label-sm text-primary">Highly Active</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[92%] rounded-full group-hover:bg-surface-tint transition-colors duration-300"></div>
+</div>
+</div>
+<!-- Pathway Item -->
+<div class="group cursor-pointer">
+<div class="flex justify-between items-end mb-2">
+<span class="font-body-lg text-body-lg text-on-surface font-medium flex items-center gap-2">
+                                Zinc <span class="material-symbols-outlined text-sm text-outline">sync_alt</span> Copper
+                            </span>
+<span class="font-label-sm text-label-sm text-outline">Balanced</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[60%] rounded-full group-hover:bg-tertiary-container transition-colors duration-300"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Ingredient Spotlight (Image Section) -->
+<section class="mt-lg grid grid-cols-1 md:grid-cols-2 gap-md items-center bg-surface-container-low rounded-xl p-md md:p-lg border border-[#F2EFE9] shadow-soft">
+<div class="order-2 md:order-1">
+<span class="inline-block px-3 py-1 bg-tertiary-fixed/30 text-tertiary rounded-full font-label-sm text-label-sm mb-md">Ingredient Spotlight</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-sm">The Citrus Accelerator</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mb-md">
+                    Your recent meals frequently feature fresh lemon zest. The ascorbic acid present acts as a powerful reducing agent, converting non-heme iron from plant sources into a form your body can readily absorb.
+                </p>
+</div>
+<div class="order-1 md:order-2 rounded-lg overflow-hidden h-64 relative bg-surface-variant">
+<img alt="Fresh lemon and kale" class="w-full h-full object-cover opacity-90 mix-blend-multiply filter contrast-125" data-alt="A close-up, high-end editorial food photography shot of fresh, vibrant green kale leaves lightly misted with water, resting on a textured, off-white artisan ceramic surface. Beside the kale, half of a bright, sunlit yellow lemon is visible, its zest glistening. The lighting is soft, natural, and directional, creating gentle shadows that emphasize the organic textures. The overall mood is fresh, healthy, and sophisticated, perfectly matching a premium wellness aesthetic with a warm, minimalist color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJMPOSGWq72c9-20uZoi70IrvP3BKwwu42i5dpzDAmxseluGiS7LXGCl59ucrfYdEQA48NAfCysrMWwbuJ6mDqV5GG3olcXMhMbcELNP3rOZbZVlQ5q4XpFmyGUDtMrZZiSPXBqYapU19Li9v18JJIqSJIEvNrkbPaN_NjE_BvBX-48pcZ3Dh8X5hgLnXpZ62Bpymt7dsEzRzxdknSUgsyiBLY03i2uhthkPlT_k3a6jt8sgZMgxz-i8H27FCTdzcF9r2kMww3kKWZ"/>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Suppressed per instructions for task/drill-down, but including HTML shell as required by JSON definition if this were not suppressed, but instructions say MUST exclude. I will exclude it entirely to strictly follow the "Automatic Suppression" rule for Task-Focused pages.) -->
+</body></html>

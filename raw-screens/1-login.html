@@ -1,0 +1,219 @@
+#Login
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#ffb4a5",
+                    "surface-container-lowest": "#ffffff",
+                    "background": "#FAF9F6",
+                    "primary-fixed": "#d7ec95",
+                    "tertiary-fixed": "#f3e0c0",
+                    "on-primary": "#ffffff",
+                    "error": "#ba1a1a",
+                    "on-secondary-container": "#732010",
+                    "primary": "#52621c",
+                    "surface": "#FAF9F6",
+                    "tertiary-container": "#817358",
+                    "surface-container-high": "#eae7e7",
+                    "outline-variant": "#c6c8b6",
+                    "tertiary-fixed-dim": "#d6c4a5",
+                    "error-container": "#ffdad6",
+                    "on-primary-fixed": "#161e00",
+                    "inverse-surface": "#303030",
+                    "secondary": "#9f402d",
+                    "on-secondary": "#ffffff",
+                    "inverse-on-surface": "#f3f0f0",
+                    "on-tertiary-fixed": "#231a06",
+                    "on-tertiary-fixed-variant": "#51452d",
+                    "primary-fixed-dim": "#bbcf7c",
+                    "surface-variant": "#e4e2e1",
+                    "on-primary-container": "#fbffe4",
+                    "surface-tint": "#54651e",
+                    "inverse-primary": "#bbcf7c",
+                    "outline": "#767869",
+                    "surface-bright": "#FAF9F6",
+                    "secondary-container": "#fd876f",
+                    "surface-dim": "#dcd9d9",
+                    "surface-container-highest": "#e4e2e1",
+                    "tertiary": "#675a41",
+                    "on-error-container": "#93000a",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f6f3f2",
+                    "on-secondary-fixed": "#3e0500",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#46483b",
+                    "on-tertiary-container": "#fffbff",
+                    "on-primary-fixed-variant": "#3d4c05",
+                    "on-surface": "#1b1c1c",
+                    "secondary-fixed": "#ffdad3",
+                    "on-background": "#1b1c1c",
+                    "primary-container": "#6a7c32",
+                    "surface-container": "#f0eded",
+                    "on-secondary-fixed-variant": "#802918"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "64px",
+                    "sm": "12px",
+                    "lg": "40px",
+                    "md": "24px",
+                    "base": "8px",
+                    "xs": "4px",
+                    "container-margin": "24px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Libre Caslon Text"],
+                    "body-md": ["DM Sans"],
+                    "headline-sm": ["Libre Caslon Text"],
+                    "label-md": ["DM Sans"],
+                    "headline-md": ["Libre Caslon Text"],
+                    "label-sm": ["DM Sans"],
+                    "display-lg": ["Libre Caslon Text"],
+                    "body-lg": ["DM Sans"]
+            },
+            "fontSize": {
+                    "display-lg-mobile": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #FAF9F6;
+            color: #1b1c1c;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-input {
+            border-bottom: 1px solid #c6c8b6;
+            transition: border-color 0.3s ease;
+        }
+        .editorial-input:focus {
+            outline: none;
+            border-color: #52621c;
+        }
+        .hero-gradient {
+            background: linear-gradient(to right, rgba(250, 249, 246, 1) 0%, rgba(250, 249, 246, 0.4) 50%, rgba(250, 249, 246, 0) 100%);
+        }
+        @media (max-width: 768px) {
+            .hero-gradient {
+                background: linear-gradient(to bottom, rgba(250, 249, 246, 0) 0%, rgba(250, 249, 246, 1) 80%);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-body-md overflow-x-hidden">
+<!-- Top Navigation Anchor (Shared Component Mapping) -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md">
+<div class="flex justify-between items-center w-full px-container-margin h-16 max-w-[1140px] mx-auto">
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary tracking-tight">FoodVision AI</h1>
+<div class="hidden md:flex gap-gutter items-center">
+<span class="font-label-md text-label-md text-on-surface-variant hover:text-secondary cursor-pointer transition-colors">Join the table</span>
+</div>
+</div>
+</header>
+<main class="flex-grow flex flex-col md:flex-row min-h-screen">
+<!-- Visual Anchor: Asymmetric Imagery Section -->
+<section class="w-full md:w-1/2 relative h-[409px] md:h-screen overflow-hidden">
+<img alt="Artisanal kitchen scene" class="absolute inset-0 w-full h-full object-cover" data-alt="A soft-focus, high-end editorial photograph of a rustic wooden kitchen counter. A glass bottle of golden olive oil sits beside a scattering of fresh green rosemary and aromatic thyme. The lighting is warm and natural, streaming through a nearby window to create long, soft shadows. The overall aesthetic is calm, minimalist, and deeply organic, utilizing a palette of earthy greens, soft creams, and warm wood tones to evoke a sense of mindful wellness and quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiCE1l5hgONdY9YS4Ubpcf822XuCi8C7ef2AXsgQTRmUTaW80zJ-s5Mtxui9Jse_0kPFfK26uYtm4rICTIwaIuoxA3tCl6XIW0WPYWDQr3rDes3Q2pqhtujXg-HLQ4cx0924H2PpQADcKQzTrH9BCW46RDV0gS5jSJRg18zKWlCM5eMxoe9me4t0roLHNUCR1hOAwbiAuYiiGf3Q--vmygVbggRdtWXCq2LsJ2SjRMrBcavJYuSab-yCgAmcMDGegp-5W0gk7jv28s"/>
+<div class="absolute inset-0 hero-gradient"></div>
+<!-- Mobile-only text overlap -->
+<div class="absolute bottom-10 left-container-margin md:hidden z-10">
+<h2 class="font-headline-md text-headline-md text-on-surface">Welcome back to your kitchen.</h2>
+</div>
+</section>
+<!-- Form Canvas -->
+<section class="w-full md:w-1/2 flex items-center justify-center p-container-margin md:p-xl bg-background">
+<div class="w-full max-w-[400px] flex flex-col gap-lg">
+<div class="hidden md:block">
+<h2 class="font-headline-md text-headline-md text-on-surface mb-xs">Welcome back to your kitchen.</h2>
+<p class="font-body-md text-body-md text-outline">Continue your journey toward mindful nourishment.</p>
+</div>
+<form class="flex flex-col gap-md" onsubmit="event.preventDefault();">
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-primary uppercase tracking-widest text-[10px]" for="email">Email Address</label>
+<input class="editorial-input bg-transparent py-sm font-body-md text-on-surface placeholder:text-outline/40" id="email" placeholder="sophie@example.com" type="email"/>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-primary uppercase tracking-widest text-[10px]" for="password">Password</label>
+<a class="font-label-sm text-label-sm text-outline hover:text-secondary transition-colors font-normal italic" href="#">Forgot password?</a>
+</div>
+<input class="editorial-input bg-transparent py-sm font-body-md text-on-surface placeholder:text-outline/40" id="password" placeholder="••••••••" type="password"/>
+</div>
+<div class="mt-base flex flex-col gap-md">
+<button class="w-full bg-primary text-on-primary py-4 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/10 flex items-center justify-center gap-base border border-primary/20">
+                            Enter the Kitchen
+                            <span class="material-symbols-outlined text-[20px]">arrow_right_alt</span>
+</button>
+<div class="flex items-center gap-gutter">
+<hr class="flex-grow border-outline-variant/30"/>
+<span class="font-label-sm text-label-sm text-outline/50">or continue with</span>
+<hr class="flex-grow border-outline-variant/30"/>
+</div>
+<div class="grid grid-cols-2 gap-gutter">
+<button class="flex items-center justify-center gap-base py-3 border border-outline-variant/40 rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]">google</span>
+<span class="font-label-md text-label-md">Google</span>
+</button>
+<button class="flex items-center justify-center gap-base py-3 border border-outline-variant/40 rounded-lg hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[20px]">ios</span>
+<span class="font-label-md text-label-md">Apple</span>
+</button>
+</div>
+</div>
+</form>
+<p class="text-center font-body-md text-body-md text-outline">
+                    New to FoodVision? <a class="text-primary font-bold hover:underline" href="#">Begin your discovery</a>
+</p>
+</div>
+</section>
+</main>
+<!-- Subtle atmospheric effect -->
+<div class="pointer-events-none fixed inset-0 z-0 opacity-20 transition-opacity duration-500" id="glow-pointer" style="background: radial-gradient(600px circle at var(--x, 0px) var(--y, 0px), rgba(215, 236, 149, 0.4), transparent 40%);"></div>
+<script>
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.getElementById('glow-pointer');
+            glow.style.setProperty('--x', e.clientX + 'px');
+            glow.style.setProperty('--y', e.clientY + 'px');
+        });
+
+        // Input interactions
+        const inputs = document.querySelectorAll('.editorial-input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.querySelector('label').classList.add('text-secondary');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.querySelector('label').classList.remove('text-secondary');
+            });
+        });
+    </script>
+</body></html>
