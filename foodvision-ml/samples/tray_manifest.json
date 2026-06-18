@@ -1,0 +1,32 @@
+[
+  {
+    "image": "c:/Users/MR ASUS/Downloads/Đồ án cuối kì/foodvision-ml/result_media__1781375329285.jpg",
+    "tray_type": "school-v",
+    "labels": ["com_trang", "canh_rau", "rau_xao", "thit_kho", "com_trang"]
+  },
+  {
+    "image": "C:/Users/MR ASUS/.cursor/projects/c-Users-MR-ASUS-Downloads-n-cu-i-k/assets/c__Users_MR_ASUS_AppData_Roaming_Cursor_User_workspaceStorage_591920810a23d4520f37b0f1fdb916a3_images_image-fae2d083-9ab0-417e-bce5-6b3988070c16.png",
+    "tray_type": "tray-32",
+    "labels": ["thit_kho", "dau_hu_chien", "rau_luoc", "canh_rau", "com_trang"]
+  },
+  {
+    "image": "C:/Users/MR ASUS/.cursor/projects/c-Users-MR-ASUS-Downloads-n-cu-i-k/assets/c__Users_MR_ASUS_AppData_Roaming_Cursor_User_workspaceStorage_591920810a23d4520f37b0f1fdb916a3_images_image-465bb696-9585-4c5c-9b33-2f07b4e463e4.png",
+    "tray_type": "tray-32",
+    "labels": ["thit_kho", "dau_hu_chien", "rau_luoc", "canh_rau", "com_trang"]
+  },
+  {
+    "image": "C:/Users/MR ASUS/.cursor/projects/c-Users-MR-ASUS-Downloads-n-cu-i-k/assets/c__Users_MR_ASUS_AppData_Roaming_Cursor_User_workspaceStorage_591920810a23d4520f37b0f1fdb916a3_images_image-c54b5113-779d-4033-991a-490a684cf543.png",
+    "tray_type": "tray-23",
+    "labels": ["canh_rau", "com_trang", "trung_chien", "rau_luoc", "thit_kho"]
+  },
+  {
+    "image": "C:/Users/MR ASUS/.cursor/projects/c-Users-MR-ASUS-Downloads-n-cu-i-k/assets/c__Users_MR_ASUS_AppData_Roaming_Cursor_User_workspaceStorage_591920810a23d4520f37b0f1fdb916a3_images_image-d48f111c-9916-4164-a83d-b3570335909c.png",
+    "tray_type": "tray-32u",
+    "labels": ["rau_xao", "ca_kho", "ca_kho", "com_trang", "canh_rau"]
+  },
+  {
+    "image": "C:/Users/MR ASUS/.cursor/projects/c-Users-MR-ASUS-Downloads-n-cu-i-k/assets/c__Users_MR_ASUS_AppData_Roaming_Cursor_User_workspaceStorage_591920810a23d4520f37b0f1fdb916a3_images_image-723b743f-93bd-4f2a-9d58-3dc5834f3497.png",
+    "tray_type": "tray-23",
+    "labels": ["rau_xao", "com_trang", "canh_rau", "mam_vung", "ca_kho"]
+  }
+]

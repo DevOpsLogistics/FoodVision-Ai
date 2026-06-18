@@ -15,8 +15,8 @@ export default function MealRecommendations() {
             Dành riêng cho bạn
           </h1>
           <p className="font-body-lg text-body-lg text-outline max-w-[672px]">
-            Khám phá các bữa ăn dinh dưỡng được điều chỉnh theo hồ sơ sinh trắc
-            học và mục tiêu bền vững của bạn. Sự lựa chọn tinh tế cho một ngày
+            Khám phá các bữa ăn dinh dưỡng được điều chỉnh theo mục tiêu sức khỏe
+            và thói quen ăn uống của bạn. Sự lựa chọn tinh tế cho một ngày
             trọn vẹn.
           </p>
         </section>

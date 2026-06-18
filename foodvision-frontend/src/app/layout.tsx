@@ -4,6 +4,7 @@ import "./globals.css";
 import FooterWrapper from "@/components/FooterWrapper";
 import FloatingMenu from "@/components/FloatingMenu";
 import AIChatBot from "@/components/AIChatBot";
+import TokenSync from "@/components/TokenSync";
 
 const dmSans = DM_Sans({
   variable: "--font-dm-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${dmSans.variable} ${libreCaslon.variable} h-full antialiased light`}
     >
       <head>
@@ -41,6 +43,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col">
+        <TokenSync />
         {children}
         <FooterWrapper />
         <FloatingMenu />

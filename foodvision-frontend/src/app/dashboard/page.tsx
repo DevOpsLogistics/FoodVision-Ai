@@ -5,8 +5,9 @@ import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import BannerSlider from "@/components/BannerSlider";
 import { useUser } from "@/hooks/useUser";
+import { dashboardApi } from "@/lib/api";
 
-const COMMUNITY_ITEMS = [
+const COMMUNITY_FALLBACK = [
   { title: "Cá hú kho", scans: 320, image: "/images/dishes/ca_hu_kho.jpg" },
   { title: "Canh chua cá", scans: 215, image: "/images/dishes/canh_chua_co_ca.jpg" },
   { title: "Sườn nướng", scans: 189, image: "/images/dishes/suon_nuong.jpg" },
@@ -18,30 +19,47 @@ const COMMUNITY_ITEMS = [
 export default function Dashboard() {
   const { user } = useUser();
   const [greeting, setGreeting] = useState("Chào bạn");
+  const [remainingCal, setRemainingCal] = useState(2200);
+  const [targetCal, setTargetCal] = useState(2200);
+  const [consumed, setConsumed] = useState({ protein: 0, carbs: 0, fat: 0 });
+  const [targets, setTargets] = useState({ protein: 120, carbs: 250, fat: 70 });
+  const [communityItems, setCommunityItems] = useState(COMMUNITY_FALLBACK);
 
   useEffect(() => {
-    // Determine greeting based on current time
-    const hour = new Date().getHours();
-    if (hour >= 0 && hour < 12) {
-      setGreeting("Chào buổi sáng");
-    } else if (hour >= 12 && hour < 14) {
-      setGreeting("Chào buổi trưa");
-    } else if (hour >= 14 && hour < 18) {
-      setGreeting("Chào buổi chiều");
-    } else {
-      setGreeting("Chào buổi tối");
-    }
+    dashboardApi.summary().then((data) => {
+      setRemainingCal(data.remaining_calories as number);
+      setTargetCal((data.targets as { calories: number }).calories);
+      setConsumed(data.consumed as { protein: number; carbs: number; fat: number });
+      setTargets(data.targets as { protein: number; carbs: number; fat: number });
+      const trending = data.community_trending as Array<{ title: string; scans: number }>;
+      if (trending?.length) {
+        setCommunityItems(
+          trending.map((t) => ({
+            title: t.title,
+            scans: t.scans,
+            image: `/images/dishes/${t.title.toLowerCase().replace(/\s+/g, "_")}.jpg`,
+          })),
+        );
+      }
+    }).catch(() => {});
+  }, []);
 
-    // Micro-interaction for the macro rings
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting("Chào buổi sáng");
+    else if (hour < 14) setGreeting("Chào buổi trưa");
+    else if (hour < 18) setGreeting("Chào buổi chiều");
+    else setGreeting("Chào buổi tối");
+
     const rings = document.querySelectorAll<SVGElement>(".macro-ring");
     rings.forEach((ring) => {
       const targetOffset = ring.getAttribute("stroke-dashoffset");
-      ring.style.strokeDashoffset = "283"; // Initial state
+      ring.style.strokeDashoffset = "283";
       setTimeout(() => {
         if (targetOffset) ring.style.strokeDashoffset = targetOffset;
       }, 300);
     });
-  }, []);
+  }, [remainingCal, targets]);
 
   return (
     <div className="font-body-md text-body-md selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen bg-background">
@@ -93,7 +111,7 @@ export default function Dashboard() {
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
                 <span className="font-headline-sm text-headline-sm text-on-surface">
-                  1,420
+                  {remainingCal.toLocaleString("vi-VN")}
                 </span>
                 <span className="font-label-sm text-label-sm text-on-surface-variant">
                   kcal còn lại
@@ -427,7 +445,7 @@ export default function Dashboard() {
           <div className="relative w-full">
             <div className="marquee-container gap-4">
               {/* First Set of Items */}
-              {COMMUNITY_ITEMS.map((item, idx) => (
+              {communityItems.map((item, idx) => (
                 <div key={`set1-${idx}`} className="w-[180px] shrink-0 bg-surface-container-lowest border border-surface-variant/30 rounded-xl p-3 flex flex-col gap-3 hover:bg-surface-container-low transition-colors cursor-pointer">
                   <div className="w-full aspect-square rounded-lg bg-surface-variant overflow-hidden shrink-0">
                     <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
@@ -439,7 +457,7 @@ export default function Dashboard() {
                 </div>
               ))}
               {/* Second Set of Items (Duplicate for seamless loop) */}
-              {COMMUNITY_ITEMS.map((item, idx) => (
+              {communityItems.map((item, idx) => (
                 <div key={`set2-${idx}`} className="w-[180px] shrink-0 bg-surface-container-lowest border border-surface-variant/30 rounded-xl p-3 flex flex-col gap-3 hover:bg-surface-container-low transition-colors cursor-pointer">
                   <div className="w-full aspect-square rounded-lg bg-surface-variant overflow-hidden shrink-0">
                     <img src={item.image} alt={item.title} className="w-full h-full object-cover" />

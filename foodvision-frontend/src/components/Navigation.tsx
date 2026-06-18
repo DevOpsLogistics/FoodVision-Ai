@@ -11,7 +11,7 @@ export default function Navigation() {
 
   const mainNavItems = [
     { name: "Bảng điều khiển", icon: "grid_view", path: "/dashboard" },
-    { name: "Máy quét", icon: "center_focus_strong", path: "/scanner" },
+    { name: "Máy quét", icon: "center_focus_strong", path: "/scanner/select-tray" },
     { name: "Thực đơn", icon: "restaurant_menu", path: "/meal-recommendations" },
     { name: "Nhật ký", icon: "auto_stories", path: "/diary" },
     { name: "Cộng đồng", icon: "groups", path: "/community" },
@@ -23,15 +23,12 @@ export default function Navigation() {
     { name: "Cửa hàng", icon: "storefront", path: "/store" },
     { name: "Cài đặt", icon: "settings", path: "/settings" },
     { name: "Tủ lạnh thông minh", icon: "kitchen", path: "/smart-fridge" },
-    { name: "Đo sinh trắc học", icon: "vital_signs", path: "/biometric-scan" },
-    { name: "Cỗ máy sức khỏe", icon: "timelapse", path: "/health-timelapse" },
-    { name: "Dinh dưỡng DNA", icon: "genetics", path: "/dna-nutrition" },
   ];
 
   // Mobile nav shows main items + a 'Menu' button that links to settings or a menu page for now
   const mobileNavItems = [
     { name: "Trang chủ", icon: "grid_view", path: "/dashboard" },
-    { name: "Máy quét", icon: "center_focus_strong", path: "/scanner" },
+    { name: "Máy quét", icon: "center_focus_strong", path: "/scanner/select-tray" },
     { name: "Nhật ký", icon: "auto_stories", path: "/diary" },
     { name: "Mở rộng", icon: "menu", path: "#" }, // Placeholder for mobile menu drawer
   ];

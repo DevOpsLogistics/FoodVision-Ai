@@ -4,6 +4,7 @@ import Navigation from "@/components/Navigation";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { useUser } from "@/hooks/useUser";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function Settings() {
   const [darkMode, setDarkMode] = useState(false);
@@ -22,6 +23,7 @@ export default function Settings() {
   ];
 
   const { user, updateUser } = useUser();
+  const { logout, updateProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [userInfo, setUserInfo] = useState(user);
 
@@ -42,9 +44,22 @@ export default function Settings() {
     }
   };
 
-  const handleSave = () => {
-    updateUser(userInfo);
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      await updateProfile({
+        name: userInfo.name,
+        hotline: userInfo.hotline,
+        support: userInfo.support,
+        address: userInfo.address,
+        banner: userInfo.banner,
+        avatar: userInfo.avatar,
+      });
+      updateUser(userInfo);
+      setIsEditing(false);
+    } catch {
+      updateUser(userInfo);
+      setIsEditing(false);
+    }
   };
 
   return (
@@ -263,14 +278,6 @@ export default function Settings() {
                   </div>
                 </div>
               </div>
-              <div className="mt-6 pt-6 border-t border-outline-variant/20 flex justify-between items-center">
-                <span className="font-body-md text-on-surface-variant">
-                  Khu vực Tập trung
-                </span>
-                <span className="px-3 py-1 bg-red-500/10 text-red-500 rounded-full font-label-sm">
-                  Tuổi thọ Tỉnh thức
-                </span>
-              </div>
             </section>
 
             {/* App Preferences */}
@@ -433,6 +440,8 @@ export default function Settings() {
             </div>
 
             <button
+              type="button"
+              onClick={logout}
               className="w-full py-4 text-error font-label-md border border-error/20 rounded-xl hover:bg-error/5 transition-colors flex items-center justify-center gap-2 animate-fade-in"
               style={{ animationDelay: "0.7s" }}
             >

@@ -11,13 +11,13 @@ interface UserProfile {
 }
 
 const defaultUser: UserProfile = {
-  name: "Trần Trung Kiên",
+  name: "",
   avatar: null,
   banner: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=2070&auto=format&fit=crop",
-  email: "trantrungkien20012006@gmail.com",
-  hotline: "0869233973",
-  support: "0329511628",
-  address: "Đông Thạnh, Hóc Môn, HCM",
+  email: "",
+  hotline: "",
+  support: "",
+  address: "",
 };
 
 export function useUser() {

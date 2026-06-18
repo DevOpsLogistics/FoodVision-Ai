@@ -2,9 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function FloatingMenu() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+
+  const hiddenRoutes = ["/scanner", "/scanner/select-tray", "/smart-fridge", "/ar-vision", "/detection-result"];
 
   // Automatically slide out when entering the website
   useEffect(() => {
@@ -13,6 +17,10 @@ export default function FloatingMenu() {
     }, 800);
     return () => clearTimeout(timer);
   }, []);
+
+  if (hiddenRoutes.includes(pathname || "")) {
+    return null;
+  }
 
   return (
     <div
