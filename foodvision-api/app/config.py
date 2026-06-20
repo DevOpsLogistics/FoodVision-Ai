@@ -17,6 +17,19 @@ class Settings(BaseSettings):
     google_client_secret: str = ""
     facebook_client_id: str = ""
     facebook_client_secret: str = ""
+    # MoMo sandbox demo (https://developers.momo.vn)
+    momo_partner_code: str = "MOMO"
+    momo_access_key: str = "F8BBA842ECF85"
+    momo_secret_key: str = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
+    momo_env: str = "sandbox"
+    momo_redirect_url: str = ""
+    momo_ipn_url: str = "http://127.0.0.1:8000/api/payments/momo/ipn"
+    # Email (Gmail App Password) — quên mật khẩu
+    smtp_host: str = "smtp.gmail.com"
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from: str = ""
 
 
 settings = Settings()

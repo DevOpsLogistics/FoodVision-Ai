@@ -3,24 +3,27 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useUser } from "@/hooks/useUser";
+import { useAuth } from "@/hooks/useAuth";
+import { SOCIAL } from "@/data/socialLinks";
+
+type NavItem = { name: string; icon?: string; path: string; external?: boolean };
 
 export default function Navigation() {
   const pathname = usePathname();
-  const { user } = useUser();
+  const { user, loading } = useAuth();
 
-  const mainNavItems = [
+  const mainNavItems: NavItem[] = [
     { name: "Bảng điều khiển", icon: "grid_view", path: "/dashboard" },
     { name: "Máy quét", icon: "center_focus_strong", path: "/scanner/select-tray" },
     { name: "Thực đơn", icon: "restaurant_menu", path: "/meal-recommendations" },
     { name: "Nhật ký", icon: "auto_stories", path: "/diary" },
-    { name: "Cộng đồng", icon: "groups", path: "/community" },
+    { name: "Cộng đồng", icon: "groups", path: SOCIAL.facebookGroup, external: true },
   ];
 
   const extendedNavItems = [
     { name: "Phân tích", icon: "analytics", path: "/nutrition-analytics" },
     { name: "Thử thách", icon: "emoji_events", path: "/challenges" },
-    { name: "Cửa hàng", icon: "storefront", path: "/store" },
+    { name: "Cửa hàng", icon: "storefront", path: "https://hcm.bephoa.vn/", external: true },
     { name: "Cài đặt", icon: "settings", path: "/settings" },
     { name: "Tủ lạnh thông minh", icon: "kitchen", path: "/smart-fridge" },
   ];
@@ -48,7 +51,7 @@ export default function Navigation() {
             {/* Dropdown Menu - Features */}
             <div className="relative group py-4">
               <button className={`flex items-center gap-2 font-label-md transition-colors ${
-                  extendedNavItems.some(item => pathname === item.path)
+                  extendedNavItems.some((item) => !item.external && pathname === item.path)
                     ? "text-on-surface font-bold"
                     : "text-on-surface-variant hover:text-on-surface"
                 }`}>
@@ -58,52 +61,107 @@ export default function Navigation() {
               
               {/* Dropdown Content */}
               <div className="absolute top-[80%] left-0 w-64 bg-surface-container border border-surface-variant/30 rounded-xl shadow-xl overflow-hidden invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-all duration-200 z-50 flex flex-col py-2">
-                {extendedNavItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    href={item.path}
-                    className={`flex items-center gap-3 px-4 py-3 transition-colors ${
-                      pathname === item.path
-                        ? "text-on-surface bg-surface-variant/50 font-bold"
-                        : "text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface"
-                    }`}
-                  >
-                    <span className="font-label-md">{item.name}</span>
-                  </Link>
-                ))}
+                {extendedNavItems.map((item) => {
+                  const linkClass = `flex items-center gap-3 px-4 py-3 transition-colors ${
+                    !item.external && pathname === item.path
+                      ? "text-on-surface bg-surface-variant/50 font-bold"
+                      : "text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface"
+                  }`;
+
+                  if (item.external) {
+                    return (
+                      <a
+                        key={item.path}
+                        href={item.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={linkClass}
+                      >
+                        <span className="font-label-md">{item.name}</span>
+                      </a>
+                    );
+                  }
+
+                  return (
+                    <Link key={item.path} href={item.path} className={linkClass}>
+                      <span className="font-label-md">{item.name}</span>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
 
-            {mainNavItems.map((item) => (
+            {mainNavItems.map((item) => {
+              const linkClass = `font-label-md text-label-md transition-colors active:scale-95 duration-150 ${
+                !item.external && pathname === item.path
+                  ? "text-red-500 font-bold"
+                  : "text-on-surface-variant hover:text-red-400"
+              }`;
+
+              if (item.external) {
+                return (
+                  <a
+                    key={item.path}
+                    href={item.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={linkClass}
+                  >
+                    {item.name}
+                  </a>
+                );
+              }
+
+              return (
+                <Link key={item.path} href={item.path} className={linkClass}>
+                  {item.name}
+                </Link>
+              );
+            })}
+          </div>
+          {loading ? (
+            <div className="hidden md:block w-36 h-10 ml-auto shrink-0" aria-hidden />
+          ) : user ? (
+            <Link href="/settings" className="hidden md:flex items-center gap-3 pl-6 border-l border-surface-variant/30 shrink-0 cursor-pointer group ml-auto">
+              <div className="w-10 h-10 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center font-bold text-lg group-hover:bg-red-500/30 transition-colors overflow-hidden shrink-0">
+                {user.avatar ? (
+                  <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                ) : (
+                  user.name ? user.name.charAt(0).toUpperCase() : "?"
+                )}
+              </div>
+              <div className="flex flex-col max-w-[150px]">
+                <span className="font-label-md text-on-surface group-hover:text-red-500 transition-colors truncate">
+                  {user.name || user.email}
+                </span>
+                <span className="text-xs text-on-surface-variant truncate">Thành viên Bạc</span>
+              </div>
+              <span className="material-symbols-outlined text-on-surface-variant group-hover:text-red-500 transition-colors ml-1 shrink-0">expand_more</span>
+            </Link>
+          ) : (
+            <div className="hidden md:flex items-center gap-3 pl-6 border-l border-surface-variant/30 shrink-0 ml-auto">
               <Link
-                key={item.path}
-                href={item.path}
-                className={`font-label-md text-label-md transition-colors active:scale-95 duration-150 ${
-                  pathname === item.path
+                href="/login"
+                className={`font-label-md text-sm transition-colors ${
+                  pathname === "/login"
                     ? "text-red-500 font-bold"
                     : "text-on-surface-variant hover:text-red-400"
                 }`}
               >
-                {item.name}
+                Đăng nhập
               </Link>
-            ))}
-          </div>
-          <Link href="/settings" className="hidden md:flex items-center gap-3 pl-6 border-l border-surface-variant/30 shrink-0 cursor-pointer group ml-auto">
-            <div className="w-10 h-10 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center font-bold text-lg group-hover:bg-red-500/30 transition-colors overflow-hidden shrink-0">
-              {user.avatar ? (
-                <img src={user.avatar} alt="Avatar" className="w-full h-full object-cover" />
-              ) : (
-                user.name ? user.name.charAt(0).toUpperCase() : "K"
-              )}
+              <Link
+                href="/register"
+                className={`font-label-md text-sm px-4 py-2 rounded-lg transition-colors ${
+                  pathname === "/register"
+                    ? "bg-red-600 text-white font-bold"
+                    : "bg-red-500 text-white hover:bg-red-600"
+                }`}
+              >
+                Đăng ký
+              </Link>
             </div>
-            <div className="flex flex-col max-w-[150px]">
-              <span className="font-label-md text-on-surface group-hover:text-red-500 transition-colors truncate">
-                {user.name}
-              </span>
-              <span className="text-xs text-on-surface-variant truncate">Thành viên Bạc</span>
-            </div>
-            <span className="material-symbols-outlined text-on-surface-variant group-hover:text-red-500 transition-colors ml-1 shrink-0">expand_more</span>
-          </Link>
+          )}
         </nav>
       </header>
 

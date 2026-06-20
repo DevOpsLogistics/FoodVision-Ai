@@ -155,6 +155,25 @@ body {
     }
 }
 
+/* Login hero — slideshow ảnh đồ ăn */
+.login-hero-zoom {
+    transform: scale(1);
+    transition: transform 8s ease-out;
+}
+.login-hero-zoom-active {
+    transform: scale(1.08);
+}
+.login-hero-overlay {
+    background: radial-gradient(ellipse 80% 60% at 30% 50%, transparent 0%, rgba(26, 21, 18, 0.15) 100%);
+}
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+    animation: fade-in 0.6s ease-out;
+}
+
 /* Dashboard Styles */
 .editorial-card {
     box-shadow: 0 20px 30px rgba(27, 28, 28, 0.04);
@@ -186,10 +205,94 @@ body {
     top: 50%;
     animation: scan 4s ease-in-out infinite;
 }
+.scanning-line-overlay {
+    height: 1.5px;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+    width: 100%;
+    position: absolute;
+    left: 0;
+    animation: scan-square 4s ease-in-out infinite;
+}
 @keyframes scan {
     0%, 100% { transform: translateY(-120px); opacity: 0; }
     20%, 80% { opacity: 1; }
     50% { transform: translateY(120px); }
+}
+@keyframes scan-square {
+    0%, 100% { top: 8%; opacity: 0; }
+    20%, 80% { opacity: 1; }
+    50% { top: 92%; }
+}
+
+/* Nút liên hệ nổi — rung + sóng pulse */
+@keyframes contact-shake {
+    0%, 78%, 100% { transform: rotate(0deg); }
+    80% { transform: rotate(-12deg); }
+    82% { transform: rotate(12deg); }
+    84% { transform: rotate(-10deg); }
+    86% { transform: rotate(10deg); }
+    88% { transform: rotate(-6deg); }
+    90% { transform: rotate(6deg); }
+    92% { transform: rotate(0deg); }
+}
+@keyframes contact-pulse-phone {
+    0% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.55); }
+    65% { box-shadow: 0 0 0 14px rgba(229, 57, 53, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(229, 57, 53, 0); }
+}
+@keyframes contact-pulse-zalo {
+    0% { box-shadow: 0 0 0 0 rgba(0, 104, 255, 0.55); }
+    65% { box-shadow: 0 0 0 14px rgba(0, 104, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 104, 255, 0); }
+}
+.contact-float-btn {
+    display: block;
+    width: 52px;
+    height: 52px;
+    border-radius: 9999px;
+    overflow: hidden;
+    animation: contact-shake 2.8s ease-in-out infinite;
+    transition: transform 0.2s ease;
+}
+.contact-float-btn:hover {
+    animation-play-state: paused;
+    transform: scale(1.08);
+}
+.contact-float-btn--phone {
+    animation: contact-shake 2.8s ease-in-out infinite, contact-pulse-phone 2s ease-out infinite;
+}
+.contact-float-btn--zalo {
+    border-radius: 14px;
+    animation: contact-shake 2.8s ease-in-out 0.4s infinite, contact-pulse-zalo 2s ease-out 0.4s infinite;
+}
+.contact-float-btn--phone:hover,
+.contact-float-btn--zalo:hover {
+    animation-play-state: paused, paused;
+}
+
+/* Timeline lịch trình — highlight vàng */
+.schedule-highlight {
+    color: #FACC15;
+}
+.schedule-card-current {
+    background-color: rgba(250, 204, 21, 0.12);
+    border-color: rgba(250, 204, 21, 0.45);
+    color: #FACC15;
+}
+.schedule-card-upcoming {
+    background-color: rgba(250, 204, 21, 0.08);
+    border-color: rgba(250, 204, 21, 0.35);
+    color: #FACC15;
+}
+.schedule-dot-current {
+    background-color: #FACC15;
+}
+.schedule-dot-past {
+    background-color: rgba(250, 204, 21, 0.55);
+}
+.schedule-dot-ping {
+    background-color: #FACC15;
 }
 
 /* Detection Result Styles */
@@ -330,4 +433,111 @@ body {
 
 .animate-marquee-right:hover {
     animation-play-state: paused;
+}
+
+@keyframes price-bouncy {
+    0%,
+    100% {
+        margin-top: 0;
+        font-size: 1.25rem;
+        text-shadow: 0 0 0 rgba(239, 68, 68, 0);
+    }
+    30% {
+        margin-top: -14px;
+        font-size: 1.7rem;
+        text-shadow: 0 8px 16px rgba(239, 68, 68, 0.45);
+    }
+    55% {
+        margin-top: 4px;
+        font-size: 1.1rem;
+        text-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+    }
+    80% {
+        margin-top: -8px;
+        font-size: 1.45rem;
+        text-shadow: 0 6px 12px rgba(239, 68, 68, 0.35);
+    }
+}
+
+.fv-price-pop,
+.animate-price-bouncy {
+    display: inline-block;
+    animation: price-bouncy 1s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fv-price-pop,
+    .animate-price-bouncy {
+        animation: none;
+    }
+}
+
+@keyframes char-shine {
+    0%,
+    100% {
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.45))
+            drop-shadow(0 0 14px rgba(239, 68, 68, 0.35));
+    }
+    50% {
+        filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.95))
+            drop-shadow(0 0 26px rgba(253, 224, 71, 0.7))
+            drop-shadow(0 0 34px rgba(239, 68, 68, 0.55));
+    }
+}
+
+.challenge-char-glow {
+    animation: char-shine 2s ease-in-out infinite;
+    will-change: filter;
+}
+
+.challenges-title-glow {
+    color: #ffffff;
+    text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.95),
+        0 0 22px rgba(255, 255, 255, 0.55),
+        0 0 36px rgba(255, 255, 255, 0.25);
+}
+
+@keyframes co-len-bounce {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes co-len-glow {
+    0%,
+    100% {
+        color: #ffffff;
+        opacity: 0.88;
+        text-shadow:
+            0 0 6px rgba(255, 255, 255, 0.5),
+            0 0 12px rgba(255, 255, 255, 0.25);
+    }
+    50% {
+        color: #ffffff;
+        opacity: 1;
+        text-shadow:
+            0 0 10px rgba(255, 255, 255, 0.85),
+            0 0 18px rgba(255, 255, 255, 0.45);
+    }
+}
+
+.co-len-wrap {
+    display: inline-block;
+    animation: co-len-bounce 2s ease-in-out infinite;
+    will-change: transform;
+}
+
+.co-len-inner {
+    display: inline-block;
+    font-weight: 800;
+    font-style: italic;
+    line-height: 1.1;
+    color: #ffffff;
+    animation: co-len-glow 2.2s ease-in-out infinite;
+    will-change: opacity, text-shadow;
 }

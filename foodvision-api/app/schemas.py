@@ -54,3 +54,16 @@ class MealCreate(BaseModel):
 class MealFromScan(BaseModel):
     scan_id: int
     meal_type: str = "lunch"
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str = Field(min_length=20)
+    password: str = Field(min_length=6)
+
+
+class MessageResponse(BaseModel):
+    message: str

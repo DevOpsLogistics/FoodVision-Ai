@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useAuth } from "@/hooks/useAuth";
 import { ApiError, getOAuthUrl } from "@/lib/api";
 import { FacebookIcon, GoogleIcon } from "@/components/OAuthIcons";
+import LoginHero from "@/components/LoginHero";
+import Navigation from "@/components/Navigation";
 
 export default function Register() {
   const { register } = useAuth();
@@ -30,74 +32,66 @@ export default function Register() {
 
   return (
     <div className="min-h-screen flex flex-col font-body-md">
-      <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md">
-        <div className="flex justify-between items-center w-full px-container-margin h-20 md:h-24 max-w-[1140px] mx-auto">
-          <Link href="/" className="flex items-center">
-            <Image src="/logo.png" alt="FoodVision AI Logo" width={320} height={80} className="object-contain h-16 md:h-20 w-auto" />
-          </Link>
-          <Link href="/login" className="font-label-md text-on-surface-variant hover:text-secondary">
-            Đã có tài khoản?
-          </Link>
-        </div>
-      </header>
+      <LoginHero />
+      <Navigation />
 
-      <main className="flex-grow flex flex-col md:flex-row min-h-screen pt-20">
-        <section className="hidden md:block md:w-1/2 relative">
-          <img
-            className="absolute inset-0 w-full h-full object-cover"
-            alt="Healthy food"
-            src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1200&auto=format&fit=crop"
-          />
-          <div className="absolute inset-0 bg-black/30" />
-          <div className="absolute bottom-12 left-12 text-white max-w-md">
-            <h2 className="font-headline-md mb-2">Bắt đầu hành trình dinh dưỡng</h2>
-            <p className="text-white/80">Quét món ăn, theo dõi calo và nhận gợi ý thực đơn cá nhân.</p>
+      <main className="flex-grow flex items-center justify-center px-container-margin pt-24 md:pt-28 pb-8 relative z-10">
+        <div className="w-full max-w-[340px] bg-surface/95 backdrop-blur-xl rounded-xl shadow-2xl p-6 md:p-7 flex flex-col gap-md border border-white/10">
+          <div className="flex flex-col items-center text-center gap-2">
+            <Image
+              src="/logo.png"
+              alt="Bếp Hoa"
+              width={220}
+              height={56}
+              className="object-contain h-14 w-auto"
+              priority
+            />
+            <h1 className="text-lg text-white">Đăng ký</h1>
+            <p className="text-white/60 text-xs">Miễn phí — chỉ mất vài giây</p>
           </div>
-        </section>
 
-        <section className="w-full md:w-1/2 flex items-center justify-center p-container-margin md:p-xl bg-background">
-          <div className="w-full max-w-[400px] flex flex-col gap-lg">
-            <div>
-              <h1 className="font-headline-md text-on-surface mb-xs">Tạo tài khoản</h1>
-              <p className="text-outline">Miễn phí — chỉ mất vài giây.</p>
+          {error && (
+            <p className="text-red-400 text-sm bg-red-500/10 px-4 py-2 rounded-lg">{error}</p>
+          )}
+
+          <form className="flex flex-col gap-sm" onSubmit={handleSubmit}>
+            <div className="flex flex-col gap-xs">
+              <label className="uppercase tracking-widest text-[10px] text-white/80" htmlFor="name">Họ và tên</label>
+              <input id="name" required value={name} onChange={(e) => setName(e.target.value)} className="editorial-input bg-transparent py-sm text-white placeholder:text-white/30 border-white/20" placeholder="Trần Văn A" />
             </div>
-
-            {error && (
-              <p className="text-red-500 text-sm bg-red-500/10 px-4 py-2 rounded-lg">{error}</p>
-            )}
-
-            <form className="flex flex-col gap-md" onSubmit={handleSubmit}>
-              <div className="flex flex-col gap-xs">
-                <label className="font-label-md text-primary uppercase text-[10px] tracking-widest" htmlFor="name">Họ và tên</label>
-                <input id="name" required value={name} onChange={(e) => setName(e.target.value)} className="editorial-input bg-transparent py-sm" placeholder="Trần Văn A" />
-              </div>
-              <div className="flex flex-col gap-xs">
-                <label className="font-label-md text-primary uppercase text-[10px] tracking-widest" htmlFor="email">Email</label>
-                <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="editorial-input bg-transparent py-sm" placeholder="email@example.com" />
-              </div>
-              <div className="flex flex-col gap-xs">
-                <label className="font-label-md text-primary uppercase text-[10px] tracking-widest" htmlFor="password">Mật khẩu</label>
-                <input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} className="editorial-input bg-transparent py-sm" placeholder="Tối thiểu 6 ký tự" />
-              </div>
-              <button type="submit" disabled={loading} className="w-full bg-primary text-on-primary py-4 rounded-lg font-label-md hover:opacity-90 disabled:opacity-60 mt-2">
-                {loading ? "Đang tạo tài khoản..." : "Đăng ký"}
+            <div className="flex flex-col gap-xs">
+              <label className="uppercase tracking-widest text-[10px] text-white/80" htmlFor="email">Email</label>
+              <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="editorial-input bg-transparent py-sm text-white placeholder:text-white/30 border-white/20" placeholder="email@example.com" />
+            </div>
+            <div className="flex flex-col gap-xs">
+              <label className="uppercase tracking-widest text-[10px] text-white/80" htmlFor="password">Mật khẩu</label>
+              <input id="password" type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} className="editorial-input bg-transparent py-sm text-white placeholder:text-white/30 border-white/20" placeholder="Tối thiểu 6 ký tự" />
+            </div>
+            <button type="submit" disabled={loading} className="w-full bg-red-500 text-white py-3 rounded-lg text-sm font-medium hover:bg-red-600 disabled:opacity-60 mt-1">
+              {loading ? "Đang tạo tài khoản..." : "Đăng ký"}
+            </button>
+            <div className="flex items-center gap-gutter">
+              <hr className="flex-grow border-white/15" />
+              <span className="text-[11px] text-white/40">hoặc</span>
+              <hr className="flex-grow border-white/15" />
+            </div>
+            <div className="grid grid-cols-2 gap-gutter">
+              <button type="button" onClick={() => { window.location.href = getOAuthUrl("google"); }} className="flex items-center justify-center gap-2 py-2.5 border border-white/15 rounded-lg hover:bg-white/5 text-sm text-white/80">
+                <GoogleIcon /><span>Google</span>
               </button>
-              <div className="flex items-center gap-gutter">
-                <hr className="flex-grow border-outline-variant/30" />
-                <span className="font-label-sm text-outline/50">hoặc</span>
-                <hr className="flex-grow border-outline-variant/30" />
-              </div>
-              <div className="grid grid-cols-2 gap-gutter">
-                <button type="button" onClick={() => { window.location.href = getOAuthUrl("google"); }} className="flex items-center justify-center gap-2 py-3 border border-outline-variant/40 rounded-lg hover:bg-surface-container-low">
-                  <GoogleIcon /><span className="font-label-md">Google</span>
-                </button>
-                <button type="button" onClick={() => { window.location.href = getOAuthUrl("facebook"); }} className="flex items-center justify-center gap-2 py-3 border border-outline-variant/40 rounded-lg hover:bg-surface-container-low">
-                  <FacebookIcon /><span className="font-label-md">Facebook</span>
-                </button>
-              </div>
-            </form>
-          </div>
-        </section>
+              <button type="button" onClick={() => { window.location.href = getOAuthUrl("facebook"); }} className="flex items-center justify-center gap-2 py-2.5 border border-white/15 rounded-lg hover:bg-white/5 text-sm text-white/80">
+                <FacebookIcon /><span>Facebook</span>
+              </button>
+            </div>
+          </form>
+
+          <p className="text-center text-xs text-white/60">
+            Đã có tài khoản?{" "}
+            <Link href="/login" className="text-white font-medium hover:underline">
+              Đăng nhập
+            </Link>
+          </p>
+        </div>
       </main>
     </div>
   );

@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database import Base, engine
 from app.ml_service import init_model
-from app.routers import auth, dashboard, meals, ml, recipes, scan, users
+from app.routers import auth, dashboard, meals, ml, payments, recipes, scan, users
 
 
 @asynccontextmanager
@@ -40,6 +40,7 @@ app.include_router(scan.router, prefix="/api")
 app.include_router(ml.router, prefix="/api")
 app.include_router(dashboard.router, prefix="/api")
 app.include_router(recipes.router, prefix="/api")
+app.include_router(payments.router, prefix="/api")
 
 
 @app.get("/api/health")

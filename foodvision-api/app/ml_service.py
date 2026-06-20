@@ -18,9 +18,8 @@ _nutrition: dict | None = None
 
 def load_nutrition() -> dict:
     global _nutrition
-    if _nutrition is None:
-        with open(NUTRITION_PATH, encoding="utf-8") as f:
-            _nutrition = json.load(f)
+    with open(NUTRITION_PATH, encoding="utf-8") as f:
+        _nutrition = json.load(f)
     return _nutrition
 
 
@@ -51,11 +50,12 @@ def ml_status() -> dict:
 def predict_from_bytes(image_bytes: bytes, tray_type: str | None = None) -> dict:
     if str(cnn_engine.ML_DIR) not in sys.path:
         sys.path.insert(0, str(cnn_engine.ML_DIR))
-    from image_utils import fix_image_orientation
+    from image_utils import fix_image_orientation, resize_for_scan
 
     img = fix_image_orientation(image_bytes)
     if img is None:
         raise ValueError("Không đọc được ảnh")
+    img = resize_for_scan(img)
 
     if not cnn_engine.is_ready():
         cnn_engine.init_engine()
@@ -67,12 +67,13 @@ def predict_from_bytes(image_bytes: bytes, tray_type: str | None = None) -> dict
     items = []
     totals = {"calories": 0, "protein": 0.0, "carbs": 0.0, "fat": 0.0}
     for row in raw["items"]:
-        nut = get_nutrition(row["class_name"])
+        class_name = cnn_engine._merge_label(row["class_name"])
+        nut = get_nutrition(class_name)
         items.append({
             "index": row["index"],
             "slot": row["slot"],
-            "class_name": row["class_name"],
-            "display_name": get_display_name(row["class_name"]),
+            "class_name": class_name,
+            "display_name": get_display_name(class_name),
             "confidence": row["confidence"],
             "bbox": row["bbox"],
             **nut,

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { SOCIAL } from "@/data/socialLinks";
 
 export default function Footer() {
   return (
@@ -49,11 +50,23 @@ export default function Footer() {
           <div className="flex flex-col items-center md:items-end gap-4">
             <h3 className="font-label-md font-bold text-red-500 mb-1 uppercase tracking-wider text-xs hidden md:block opacity-0">Kết nối</h3>
             <div className="flex gap-3">
-              <a href="#" className="w-10 h-10 rounded-full bg-surface-container-highest text-background flex items-center justify-center hover:bg-red-500 transition-colors">
-                <span className="font-bold text-sm">Zalo</span>
+              <a
+                href={SOCIAL.zaloUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 rounded-full overflow-hidden shadow-md hover:scale-105 transition-transform"
+                aria-label="Zalo"
+              >
+                <Image src="/logos/zalo.svg" alt="Zalo" width={44} height={44} className="w-full h-full object-cover" />
               </a>
-              <a href="#" className="w-10 h-10 rounded-full bg-surface-container-highest text-background flex items-center justify-center hover:bg-red-500 transition-colors">
-                <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.312h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z"/></svg>
+              <a
+                href={SOCIAL.facebookProfile}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 rounded-full overflow-hidden shadow-md hover:scale-105 transition-transform"
+                aria-label="Facebook"
+              >
+                <Image src="/logos/facebook.svg" alt="Facebook" width={44} height={44} className="w-full h-full object-cover" />
               </a>
             </div>
           </div>

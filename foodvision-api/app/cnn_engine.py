@@ -21,12 +21,24 @@ load_dotenv(ROOT / "foodvision-api" / ".env", override=True)
 ML_DIR = ROOT / "foodvision-ml"
 SOURCE_MODEL = ML_DIR / "food_model_best.keras"
 CLASSES_PATH = ML_DIR / "class_names.json"
+MODEL_CLASSES_PATH = ML_DIR / "class_names_model.json"
 
 _model = None
 _class_names: list[str] | None = None
+_model_class_names: list[str] | None = None
 _ready = False
 _error: str | None = None
 _cache_model: Path | None = None
+
+# ca_kho bị tắt — dễ nhầm với sườn nướng (màu nâu đậm tương tự)
+_DISABLED_CLASSES = frozenset({"kim_chi", "rau_xao", "rau_luoc", "mam_vung", "ca_kho"})
+
+# Gộp nhãn: thịt kho → thịt kho trứng (cùng món, tránh tách 2 lớp)
+_MERGE_MAP = {"thit_kho": "thit_kho_trung"}
+
+
+def _merge_label(class_name: str) -> str:
+    return _MERGE_MAP.get(class_name, class_name)
 
 # Khay V inox — fallback school-v (template load từ tray_templates.json)
 TRAY_SLOTS: list[tuple[float, float, float, float]] = [
@@ -42,7 +54,7 @@ CROP_VERSION = "warp-auto-v10"
 SLOT_HINTS: dict[int, str] = {}
 
 # Món thường chỉ có 1 phần / khay
-_SINGLE_SERVING = frozenset({"com_trang", "canh_rau", "canh_chua_co_ca", "canh_chua_khong_ca"})
+_SINGLE_SERVING = frozenset({"com_trang", "canh_rau", "canh_chua"})
 
 
 def _cache_dir() -> Path:
@@ -127,15 +139,66 @@ def _raw_scores(comp: np.ndarray) -> dict[str, float]:
     img_resized = cv2.resize(comp, (224, 224))
     img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
     scores = _model.predict(np.expand_dims(img_rgb, axis=0), verbose=0)[0]
-    return { _class_names[i]: float(scores[i]) for i in range(len(_class_names)) }
+    names = _model_class_names or _class_names or []
+    return {names[i]: float(scores[i]) for i in range(len(names))}
+
+
+def _pick_best_class(scores: dict[str, float], extra_exclude: set[str] | None = None) -> tuple[str, float]:
+    skip = _DISABLED_CLASSES | (extra_exclude or set())
+    for name, conf in sorted(scores.items(), key=lambda x: x[1], reverse=True):
+        if name not in skip:
+            return name, conf
+    order = sorted(scores.keys(), key=lambda k: scores[k], reverse=True)
+    return order[0], scores[order[0]]
+
+
+def _looks_like_egg(crop: np.ndarray) -> bool:
+    """Trứng chiên: lòng đỏ cam sáng + lòng trắng. Tránh nhầm sang thịt nâu."""
+    hsv = cv2.cvtColor(cv2.resize(crop, (96, 96)), cv2.COLOR_BGR2HSV)
+    h, s, v = hsv[:, :, 0], hsv[:, :, 1], hsv[:, :, 2]
+    yolk = ((h >= 16) & (h <= 45) & (s > 90) & (v > 165)).mean()
+    egg_white = ((s < 55) & (v > 170)).mean()
+    return float(yolk) > 0.10 or (float(yolk) > 0.05 and float(egg_white) > 0.18)
+
+
+def _looks_like_brown_meat(crop: np.ndarray) -> bool:
+    """Thịt nâu (sườn nướng / thịt kho): nhiều vùng nâu-đỏ SẬM, ít trắng/xanh.
+    Dùng để chặn nhầm sang cơm trắng / canh khi crop dính khay inox sáng.
+    Loại trừ trứng (lòng đỏ cam sáng)."""
+    if _looks_like_egg(crop):
+        return False
+    hsv = cv2.cvtColor(cv2.resize(crop, (96, 96)), cv2.COLOR_BGR2HSV)
+    h, s, v = hsv[:, :, 0], hsv[:, :, 1], hsv[:, :, 2]
+    # nâu-đỏ sậm: hue đỏ/nâu, độ sáng vừa-thấp (không phải cam lòng đỏ sáng)
+    brown = (((h <= 18) | (h >= 168)) & (s > 60) & (v > 35) & (v < 170)).mean()
+    bright_orange = ((h >= 16) & (h <= 45) & (s > 85) & (v > 165)).mean()
+    white = ((s < 45) & (v > 150)).mean()
+    green = ((h >= 32) & (h <= 88) & (s > 30) & (v > 35)).mean()
+    return (
+        float(brown) > 0.32
+        and float(bright_orange) < 0.08
+        and float(white) < 0.30
+        and float(green) < 0.12
+    )
 
 
 def _looks_like_rice(crop: np.ndarray) -> bool:
     """Cơm trắng: vùng sáng, ít màu vàng/nâu (đậu hũ chiên không pass)."""
+    if _looks_like_brown_meat(crop):
+        return False
     hsv = cv2.cvtColor(cv2.resize(crop, (96, 96)), cv2.COLOR_BGR2HSV)
     white = ((hsv[:, :, 1] < 50) & (hsv[:, :, 2] > 125)).mean()
     golden = ((hsv[:, :, 0] >= 8) & (hsv[:, :, 0] <= 40) & (hsv[:, :, 1] > 45)).mean()
     return float(white) > 0.22 and float(golden) < 0.18
+
+
+def _pick_brown_meat(scores: dict[str, float]) -> tuple[str, float]:
+    """Chọn món thịt nâu khả dĩ nhất theo điểm model."""
+    candidates = {c: scores[c] for c in ("suon_nuong", "thit_kho_trung") if c in scores}
+    if not candidates:
+        return _pick_best_class(scores, {"com_trang", "canh_rau"})
+    name = max(candidates, key=candidates.get)
+    return name, max(candidates[name], 0.6)
 
 
 def _looks_like_fried_tofu(crop: np.ndarray) -> bool:
@@ -143,16 +206,6 @@ def _looks_like_fried_tofu(crop: np.ndarray) -> bool:
     golden = ((hsv[:, :, 0] >= 8) & (hsv[:, :, 0] <= 38) & (hsv[:, :, 1] > 35) & (hsv[:, :, 2] > 55)).mean()
     white = ((hsv[:, :, 1] < 45) & (hsv[:, :, 2] > 140)).mean()
     return float(golden) > 0.15 and float(white) < 0.20
-
-
-def _looks_like_kimchi(crop: np.ndarray) -> bool:
-    hsv = cv2.cvtColor(cv2.resize(crop, (96, 96)), cv2.COLOR_BGR2HSV)
-    red = (
-        ((hsv[:, :, 0] <= 12) | (hsv[:, :, 0] >= 168))
-        & (hsv[:, :, 1] > 70)
-        & (hsv[:, :, 2] > 50)
-    ).mean()
-    return float(red) > 0.10
 
 
 def _looks_like_greens(crop: np.ndarray) -> bool:
@@ -184,23 +237,6 @@ def _looks_like_canh(crop: np.ndarray) -> bool:
     return float(broth) > 0.26 and float(dark) < 0.35
 
 
-def _looks_like_mam_vung(crop: np.ndarray) -> bool:
-    if _looks_like_greens(crop) or _looks_like_canh(crop) or _looks_like_rice(crop):
-        return False
-    hsv = cv2.cvtColor(cv2.resize(crop, (96, 96)), cv2.COLOR_BGR2HSV)
-    tan = (
-        (hsv[:, :, 0] >= 8)
-        & (hsv[:, :, 0] <= 35)
-        & (hsv[:, :, 1] > 25)
-        & (hsv[:, :, 1] < 130)
-        & (hsv[:, :, 2] > 70)
-        & (hsv[:, :, 2] < 210)
-    ).mean()
-    dark = (hsv[:, :, 2] < 75).mean()
-    red = ((hsv[:, :, 0] <= 12) | (hsv[:, :, 0] >= 168)) & (hsv[:, :, 1] > 60)
-    return float(tan) > 0.16 and float(dark) < 0.22 and float(red.mean()) < 0.08
-
-
 def _looks_like_ca_kho(crop: np.ndarray) -> bool:
     hsv = cv2.cvtColor(cv2.resize(crop, (96, 96)), cv2.COLOR_BGR2HSV)
     dark = (
@@ -215,24 +251,70 @@ def _looks_like_ca_kho(crop: np.ndarray) -> bool:
 def _apply_color_label(comp: np.ndarray, scores: dict[str, float]) -> tuple[str, float] | None:
     if _looks_like_rice(comp) and "com_trang" in scores:
         return "com_trang", max(scores["com_trang"], 0.85)
-    if _looks_like_greens(comp) and "rau_xao" in scores:
-        return "rau_xao", max(scores["rau_xao"], 0.65)
     if _looks_like_canh(comp) and "canh_rau" in scores:
         return "canh_rau", max(scores["canh_rau"], 0.68)
-    if _looks_like_kimchi(comp) and "kim_chi" in scores:
-        return "kim_chi", max(scores["kim_chi"], 0.62)
-    if _looks_like_mam_vung(comp) and "mam_vung" in scores:
-        return "mam_vung", max(scores["mam_vung"], 0.58)
-    if _looks_like_ca_kho(comp) and not _looks_like_kimchi(comp) and "ca_kho" in scores:
-        return "ca_kho", max(scores["ca_kho"], 0.65)
+    if _looks_like_greens(comp) and "canh_rau" in scores:
+        return "canh_rau", max(scores["canh_rau"], 0.62)
     return None
 
 
 def _best_class_excluding(scores: dict[str, float], exclude: set[str]) -> tuple[str, float] | None:
+    skip = exclude | _DISABLED_CLASSES
     for name, conf in sorted(scores.items(), key=lambda x: x[1], reverse=True):
-        if name not in exclude and conf >= 0.30:
+        if name not in skip and conf >= 0.30:
             return name, conf
     return None
+
+
+def _enforce_unique_classes(
+    items: list[dict], compartments: list[np.ndarray]
+) -> list[dict]:
+    """Mỗi món chỉ xuất hiện tối đa 1 lần trên khay.
+
+    Khi hai ngăn trùng nhãn: giữ ngăn có điểm cao nhất (riêng cơm ưu tiên ngăn
+    'trông giống cơm' nhất), ngăn còn lại đẩy sang lớp có điểm cao nhất CHƯA bị
+    dùng. Đây là ràng buộc cứng — ổn định hơn việc lọc màu từng món."""
+    if len(items) < 2:
+        return items
+
+    from collections import defaultdict
+
+    groups: dict[str, list[dict]] = defaultdict(list)
+    for it in items:
+        groups[it["class_name"]].append(it)
+
+    used: set[str] = {name for name in groups}
+
+    for name, group in list(groups.items()):
+        if len(group) < 2:
+            continue
+        if name == "com_trang":
+            group.sort(
+                key=lambda it: (
+                    _looks_like_rice(compartments[it["index"]])
+                    if it["index"] < len(compartments)
+                    else False,
+                    it["confidence"],
+                ),
+                reverse=True,
+            )
+        else:
+            group.sort(key=lambda it: it["confidence"], reverse=True)
+
+        for dup in group[1:]:
+            idx = dup["index"]
+            scores = _raw_scores(compartments[idx]) if idx < len(compartments) else {}
+            alt = None
+            for cand, conf in sorted(scores.items(), key=lambda x: x[1], reverse=True):
+                if cand in _DISABLED_CLASSES or cand in used:
+                    continue
+                alt = (cand, conf)
+                break
+            if alt:
+                dup["class_name"] = alt[0]
+                dup["confidence"] = round(max(alt[1], 0.45), 4)
+                used.add(alt[0])
+    return items
 
 
 def _refine_predictions(items: list[dict], compartments: list[np.ndarray]) -> list[dict]:
@@ -246,6 +328,11 @@ def _refine_predictions(items: list[dict], compartments: list[np.ndarray]) -> li
             continue
         comp = compartments[idx]
         scores = _raw_scores(comp)
+
+        if it["class_name"] in ("com_trang", "canh_rau") and _looks_like_brown_meat(comp):
+            name, conf = _pick_brown_meat(scores)
+            it["class_name"], it["confidence"] = name, round(conf, 4)
+            continue
 
         if it["class_name"] == "com_trang" and not _looks_like_rice(comp):
             alt = _best_class_excluding(scores, {"com_trang"})
@@ -266,7 +353,7 @@ def _refine_predictions(items: list[dict], compartments: list[np.ndarray]) -> li
             override = (
                 name == "com_trang"
                 or name == "canh_rau"
-                or it["class_name"] in ("thit_kho", "ca_kho", "canh_rau", "rau_xao", "mam_vung", "com_trang")
+                or it["class_name"] in ("thit_kho", "thit_kho_trung", "canh_rau", "com_trang")
                 or conf > it["confidence"] + 0.05
             )
             if override:
@@ -276,66 +363,16 @@ def _refine_predictions(items: list[dict], compartments: list[np.ndarray]) -> li
             it["class_name"] = "canh_rau"
             it["confidence"] = round(max(scores.get("canh_rau", 0.5), 0.68), 4)
 
-    # Tối đa 1 cơm / khay
-    rice = [it for it in items if it["class_name"] == "com_trang"]
-    if len(rice) > 1:
-        rice.sort(
-            key=lambda it: (
-                _looks_like_rice(compartments[it["index"]]),
-                it["confidence"],
-            ),
-            reverse=True,
-        )
-        for dup in rice[1:]:
-            comp = compartments[dup["index"]]
-            scores = _raw_scores(comp)
-            alt = _best_class_excluding(scores, {"com_trang"})
-            if alt:
-                dup["class_name"], dup["confidence"] = alt[0], round(alt[1], 4)
-            elif _looks_like_fried_tofu(comp):
-                dup["class_name"] = "dau_hu_chien"
-                dup["confidence"] = 0.58
-
-    # Tối đa 1 cá kho — tránh nhầm mắm vừng thành cá kho
-    ca_kho_items = [it for it in items if it["class_name"] == "ca_kho"]
-    if len(ca_kho_items) > 1:
-        ca_kho_items.sort(
-            key=lambda it: (_looks_like_ca_kho(compartments[it["index"]]), it["confidence"]),
-            reverse=True,
-        )
-        for dup in ca_kho_items[1:]:
-            comp = compartments[dup["index"]]
-            scores = _raw_scores(comp)
-            if _looks_like_mam_vung(comp) and "mam_vung" in scores:
-                dup["class_name"] = "mam_vung"
-                dup["confidence"] = round(max(scores["mam_vung"], 0.58), 4)
-            elif _looks_like_kimchi(comp) and "kim_chi" in scores:
-                dup["class_name"] = "kim_chi"
-                dup["confidence"] = round(max(scores["kim_chi"], 0.58), 4)
-            else:
-                alt = _best_class_excluding(scores, {"ca_kho", "com_trang"})
+    for it in items:
+        if it["class_name"] in _DISABLED_CLASSES:
+            idx = it["index"]
+            if idx < len(compartments):
+                alt = _best_class_excluding(_raw_scores(compartments[idx]), set())
                 if alt:
-                    dup["class_name"], dup["confidence"] = alt[0], round(alt[1], 4)
+                    it["class_name"], it["confidence"] = alt[0], round(alt[1], 4)
 
-    mam_items = [it for it in items if it["class_name"] == "mam_vung"]
-    if len(mam_items) > 1:
-        mam_items.sort(
-            key=lambda it: (_looks_like_mam_vung(compartments[it["index"]]), it["confidence"]),
-            reverse=True,
-        )
-        for dup in mam_items[1:]:
-            comp = compartments[dup["index"]]
-            scores = _raw_scores(comp)
-            if _looks_like_kimchi(comp) and "kim_chi" in scores:
-                dup["class_name"] = "kim_chi"
-                dup["confidence"] = round(max(scores["kim_chi"], 0.58), 4)
-            elif _looks_like_rice(comp):
-                dup["class_name"] = "com_trang"
-                dup["confidence"] = round(max(scores.get("com_trang", 0.7), 0.7), 4)
-            else:
-                alt = _best_class_excluding(scores, {"mam_vung"})
-                if alt:
-                    dup["class_name"], dup["confidence"] = alt[0], round(alt[1], 4)
+    # Ràng buộc cứng: mỗi món chỉ xuất hiện 1 lần trên khay
+    items = _enforce_unique_classes(items, compartments)
 
     return items
 
@@ -343,9 +380,12 @@ def _refine_predictions(items: list[dict], compartments: list[np.ndarray]) -> li
 def _predict_crop(comp: np.ndarray, slot_idx: int) -> tuple[str, float]:
     """CNN — nếu confidence thấp, thử lớp thứ 2 nếu gần bằng."""
     scores = _raw_scores(comp)
-    order = sorted(scores.keys(), key=lambda k: scores[k], reverse=True)
-    class_name = order[0]
-    confidence = scores[class_name]
+    class_name, confidence = _pick_best_class(scores)
+    order = sorted(
+        (n for n in scores if n not in _DISABLED_CLASSES),
+        key=lambda k: scores[k],
+        reverse=True,
+    )
 
     if confidence < 0.72 and len(order) > 1:
         second_name = order[1]
@@ -355,14 +395,20 @@ def _predict_crop(comp: np.ndarray, slot_idx: int) -> tuple[str, float]:
                 class_name, confidence = second_name, second_conf
 
     if class_name == "com_trang" and not _looks_like_rice(comp):
-        if _looks_like_canh(comp) and "canh_rau" in scores:
+        if _looks_like_brown_meat(comp):
+            class_name, confidence = _pick_brown_meat(scores)
+        elif _looks_like_canh(comp) and "canh_rau" in scores:
             class_name, confidence = "canh_rau", max(scores["canh_rau"], 0.68)
         else:
             alt = _best_class_excluding(scores, {"com_trang"})
             if alt:
                 class_name, confidence = alt
-            elif _looks_like_fried_tofu(comp):
+            elif _looks_like_fried_tofu(comp) and "dau_hu_chien" in scores:
                 class_name, confidence = "dau_hu_chien", max(scores.get("dau_hu_chien", 0.5), 0.55)
+
+    # Thịt nâu (sườn / thịt kho) hay bị nhầm cơm/canh khi crop dính khay inox sáng
+    if class_name in ("com_trang", "canh_rau") and _looks_like_brown_meat(comp):
+        class_name, confidence = _pick_brown_meat(scores)
 
     hint = SLOT_HINTS.get(slot_idx)
     if hint and hint in scores:
@@ -449,7 +495,7 @@ def status() -> dict:
 
 
 def init_engine() -> dict:
-    global _model, _class_names, _ready, _error
+    global _model, _class_names, _model_class_names, _ready, _error
 
     if _ready and _model is not None:
         return status()
@@ -466,6 +512,9 @@ def init_engine() -> dict:
 
         import tensorflow as tf  # noqa: F401
 
+        model_classes_file = MODEL_CLASSES_PATH if MODEL_CLASSES_PATH.exists() else CLASSES_PATH
+        with open(model_classes_file, encoding="utf-8") as f:
+            _model_class_names = json.load(f)
         with open(CLASSES_PATH, encoding="utf-8") as f:
             _class_names = json.load(f)
 
@@ -480,7 +529,7 @@ def init_engine() -> dict:
         from predict import predict_image
 
         dummy = np.zeros((120, 120, 3), dtype=np.uint8)
-        predict_image(_model, _class_names, dummy)
+        predict_image(_model, _model_class_names, dummy)
 
         mode = _crop_mode()
         if mode == "yolo":
@@ -547,14 +596,14 @@ def _score_items(items: list[dict]) -> float:
         else:
             score += min(area, 0.25) * 4
         score += float(it["confidence"]) * 0.5
-    names = [it["class_name"] for it in items]
+    names = [_merge_label(it["class_name"]) for it in items]
     for i, a in enumerate(names):
         for b in names[i + 1 :]:
             if a == b == "com_trang":
                 score -= 3.0
             elif a == b == "canh_rau":
                 score -= 1.2
-            elif a == b == "thit_kho":
+            elif a == b == "thit_kho_trung":
                 score -= 2.0
             elif a == b:
                 score -= 0.8
@@ -593,10 +642,14 @@ def _detect_template(
         candidates.extend(crop_tray_candidates(image_bgr, tray_type=tray_type))
     else:
         # Không biết loại khay — thử mọi layout, chọn kết quả CNN tốt nhất.
-        # warp-auto (cắt theo nội dung) sinh ra qua các key dọc school-v/tray-32.
-        from detect_tray_grid import _guess_horizontal_layout, detect_tray_compartments
-        from crop_tray import find_tray_corners_robust, warp_tray
+        # Ưu tiên crop tất định (tách khay theo màu → warp → chọn layout theo vị trí cơm).
+        from detect_tray_grid import detect_tray_compartments
+        from crop_tray_warp import crop_tray_auto
         from tray_templates import list_tray_types
+
+        auto_comps, auto_boxes, auto_type = crop_tray_auto(image_bgr)
+        if len(auto_comps) >= 3:
+            candidates.append((auto_comps, auto_boxes, f"auto-det-{auto_type}"))
 
         grid_comps, grid_boxes, grid_mode = detect_tray_compartments(image_bgr)
         candidates.append((grid_comps, grid_boxes, grid_mode))
@@ -611,13 +664,17 @@ def _detect_template(
         if len(comps) < 3:
             continue
         is_auto = "warp-auto" in mode
+        is_det = mode.startswith("auto-det-")
         items = _detect_from_compartments(
-            image_bgr, min_confidence, comps, boxes, keep_all=is_auto
+            image_bgr, min_confidence, comps, boxes, keep_all=is_auto or is_det
         )
         score = _score_items(items)
-        if not is_auto and len(comps) >= 5 and len(items) < 5:
+        if not is_auto and not is_det and len(comps) >= 5 and len(items) < 5:
             score -= 4.0
-        if is_auto:
+        if is_det:
+            # crop tất định theo hình học khay — đáng tin nhất, thưởng mạnh
+            score += 8.0 + len(items) * 0.6
+        elif is_auto:
             # ngăn cắt theo nội dung thật — thưởng theo độ phủ
             score += 5.0 + len(items) * 0.6
         elif "warp-grid" in mode:

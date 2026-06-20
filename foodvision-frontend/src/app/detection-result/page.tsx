@@ -1,15 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Navigation from "@/components/Navigation";
 import { useRouter } from "next/navigation";
+import {
+  EditorialCard,
+  PageHeader,
+  PageShell,
+  PrimaryButton,
+  SecondaryButton,
+  SectionDivider,
+  StatPill,
+} from "@/components/PageLayout";
 import { mealsApi, scanApi, ScanResult } from "@/lib/api";
+import { dishImage } from "@/data/dishImages";
 
 export default function DetectionResult() {
   const router = useRouter();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [scan, setScan] = useState<ScanResult | null>(null);
-  const [imageUrl, setImageUrl] = useState("/images/dishes/thit_kho.jpg");
+  const [imageUrl, setImageUrl] = useState(dishImage("goi_cuon"));
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -49,6 +58,7 @@ export default function DetectionResult() {
     setSaving(true);
     try {
       await mealsApi.fromScan(scan.scan_id);
+      window.dispatchEvent(new Event("foodvision:meals-updated"));
       router.push("/diary");
     } catch {
       setSaving(false);
@@ -57,9 +67,9 @@ export default function DetectionResult() {
 
   if (!scan) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <p className="text-on-surface">Đang tải kết quả...</p>
-      </div>
+      <PageShell>
+        <p className="text-on-surface-variant text-center py-24">Đang tải kết quả...</p>
+      </PageShell>
     );
   }
 
@@ -67,107 +77,90 @@ export default function DetectionResult() {
   const mainName = items.map((i) => i.display_name).join(", ");
 
   return (
-    <div className="bg-background text-on-background font-body-md min-h-screen">
-      <Navigation />
+    <PageShell>
+      <PageHeader
+        eyebrow="Máy quét"
+        title="Kết quả nhận diện"
+        description={`Phát hiện ${items.length} thành phần · ${mainName}`}
+        action={
+          <button
+            type="button"
+            onClick={() => router.push("/scanner")}
+            className="flex items-center gap-xs font-label-md text-label-md text-primary hover:text-secondary transition-colors shrink-0"
+          >
+            <span className="material-symbols-outlined text-[18px]">refresh</span>
+            Quét lại
+          </button>
+        }
+      />
 
-      <main className="max-w-[1140px] mx-auto px-container-margin py-lg pt-24">
-        <div className="flex flex-col lg:flex-row gap-lg">
-          <div className="flex-1 relative group">
-            <div className="rounded-xl overflow-hidden shadow-[0_20px_30px_rgba(27,28,28,0.06)] bg-white">
-              {/* w-full h-auto giữ đúng tỷ lệ ảnh gốc — bbox % khớp overlay */}
-              <div className="relative w-full">
-                <img alt={mainName} className="w-full h-auto block" src={imageUrl} />
-                {items.map((item, idx) => (
-                  <div
-                    key={`${item.index}-${idx}`}
-                    className="detection-box pointer-events-auto"
-                    style={getBoxStyle(idx, item.bbox)}
-                    onMouseEnter={() => setHoveredIndex(idx)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                  >
-                    <span className="detection-label font-label-sm text-label-sm">
-                      {item.display_name} ({Math.round(item.confidence <= 1 ? item.confidence * 100 : item.confidence)}%)
-                    </span>
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-md">
+        <div className="md:col-span-5">
+          <EditorialCard padding="p-0 overflow-hidden">
+            <div className="relative w-full">
+              <img alt={mainName} className="w-full h-auto block" src={imageUrl} />
+              {items.map((item, idx) => (
+                <div
+                  key={`${item.index}-${idx}`}
+                  className="detection-box pointer-events-auto"
+                  style={getBoxStyle(idx, item.bbox)}
+                  onMouseEnter={() => setHoveredIndex(idx)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  <span className="detection-label font-label-sm text-label-sm">
+                    {item.display_name} (
+                    {Math.round(item.confidence <= 1 ? item.confidence * 100 : item.confidence)}%)
+                  </span>
+                </div>
+              ))}
+            </div>
+          </EditorialCard>
+        </div>
+
+        <div className="md:col-span-7 flex flex-col gap-md">
+          <EditorialCard padding="p-lg">
+            <SectionDivider title="Dinh dưỡng bữa ăn" />
+            <div className="flex flex-wrap gap-sm mb-lg -mt-2">
+              <StatPill tone="secondary" value={`${Math.round(totals.calories)}`} label="Calo" />
+              <StatPill tone="primary" value={`${Math.round(totals.protein)}g`} label="Đạm" />
+              <StatPill tone="tertiary" value={`${Math.round(totals.fat)}g`} label="Chất béo" />
+            </div>
+
+            <div className="space-y-md border-t border-[#F2EFE9] pt-md">
+              {items.map((item, idx) => (
+                <div
+                  key={idx}
+                  className="flex justify-between items-center transition-colors hover:bg-surface-container-low p-3 -mx-3 rounded-lg cursor-pointer"
+                  onMouseEnter={() => setHoveredIndex(idx)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  <div>
+                    <p className="font-label-md text-label-md text-on-surface">
+                      {item.display_name}{" "}
+                      <span className="text-outline font-normal">
+                        ({Math.round(item.confidence <= 1 ? item.confidence * 100 : item.confidence)}%)
+                      </span>
+                    </p>
+                    <p className="font-label-sm text-label-sm text-outline">
+                      {Math.round(item.calories)} kcal · {Math.round(item.protein)}g đạm ·{" "}
+                      {Math.round(item.carbs)}g tinh bột
+                    </p>
                   </div>
-                ))}
-              </div>
-            </div>
-            <div className="mt-md flex justify-between items-center">
-              <p className="font-label-md text-label-md text-outline">
-                Nhận diện {items.length} thành phần
-              </p>
-              <button
-                onClick={() => router.push("/scanner")}
-                className="flex items-center gap-xs font-label-md text-label-md text-primary hover:text-secondary-container transition-colors"
-              >
-                <span className="material-symbols-outlined text-[18px]">refresh</span>
-                Quét lại
-              </button>
-            </div>
-          </div>
-
-          <div className="w-full lg:w-[400px] flex flex-col gap-md">
-            <section className="bg-white p-md rounded-xl shadow-[0_20px_30px_rgba(27,28,28,0.04)] border border-[#F2EFE9]">
-              <div className="mb-lg">
-                <h1 className="font-headline-md text-headline-md text-on-surface mb-xs">Kết quả nhận diện</h1>
-                <p className="font-body-md text-body-md text-on-surface-variant">{mainName}</p>
-              </div>
-
-              <div className="flex flex-wrap gap-sm mb-lg">
-                <div className="bg-secondary/10 px-4 py-2 rounded-full border border-secondary/20">
-                  <span className="font-label-sm text-label-sm text-secondary">{Math.round(totals.calories)} Calo</span>
                 </div>
-                <div className="bg-primary/10 px-4 py-2 rounded-full border border-primary/20">
-                  <span className="font-label-sm text-label-sm text-primary">{Math.round(totals.protein)}g Đạm</span>
-                </div>
-                <div className="bg-tertiary/10 px-4 py-2 rounded-full border border-tertiary/20">
-                  <span className="font-label-sm text-label-sm text-tertiary">{Math.round(totals.fat)}g Chất béo</span>
-                </div>
-              </div>
-
-              <div className="space-y-md border-t border-[#F2EFE9] pt-md">
-                {items.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex justify-between items-center transition-colors hover:bg-surface-container-lowest p-2 -mx-2 rounded-lg cursor-pointer"
-                    onMouseEnter={() => setHoveredIndex(idx)}
-                    onMouseLeave={() => setHoveredIndex(null)}
-                  >
-                    <div>
-                      <p className="font-label-md text-label-md text-on-surface">
-                        {item.display_name}
-                        {" "}
-                        <span className="text-outline font-normal">
-                          ({Math.round(item.confidence <= 1 ? item.confidence * 100 : item.confidence)}%)
-                        </span>
-                      </p>
-                      <p className="font-label-sm text-label-sm text-outline">
-                        {Math.round(item.calories)} kcal • {Math.round(item.protein)}g Đạm • {Math.round(item.carbs)}g Tinh bột
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-
-            <div className="flex flex-col gap-sm">
-              <button
-                onClick={handleSaveMeal}
-                disabled={saving}
-                className="w-full bg-primary text-white py-4 rounded-xl font-label-md text-label-md shadow-lg active:scale-[0.98] transition-all hover:bg-primary-container disabled:opacity-60"
-              >
-                {saving ? "Đang lưu..." : "Lưu vào Nhật ký"}
-              </button>
-              <button
-                onClick={() => router.push("/dashboard")}
-                className="w-full bg-white border border-outline-variant text-on-surface-variant py-4 rounded-xl font-label-md text-label-md hover:bg-surface-container-low transition-colors"
-              >
-                Về Trang chủ
-              </button>
+              ))}
             </div>
+          </EditorialCard>
+
+          <div className="flex flex-col gap-sm">
+            <PrimaryButton onClick={handleSaveMeal} disabled={saving}>
+              {saving ? "Đang lưu..." : "Lưu vào Nhật ký"}
+            </PrimaryButton>
+            <SecondaryButton onClick={() => router.push("/dashboard")}>
+              Về Bảng điều khiển
+            </SecondaryButton>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </PageShell>
   );
 }

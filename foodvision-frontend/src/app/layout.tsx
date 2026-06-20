@@ -23,6 +23,10 @@ const libreCaslon = Libre_Caslon_Text({
 export const metadata: Metadata = {
   title: "FoodVision AI",
   description: "Natural UI Redesign for FoodVision AI",
+  icons: {
+    icon: [{ url: "/favicon.png", type: "image/png" }],
+    apple: [{ url: "/favicon.png", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({

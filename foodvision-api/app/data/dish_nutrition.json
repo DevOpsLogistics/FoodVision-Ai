@@ -1,17 +1,14 @@
 {
-  "ca_hu_kho": { "display": "Cá hú kho", "calories": 320, "protein": 28, "carbs": 8, "fat": 18 },
   "ca_kho": { "display": "Cá kho", "calories": 280, "protein": 26, "carbs": 6, "fat": 16 },
-  "canh_chua_co_ca": { "display": "Canh chua có cá", "calories": 180, "protein": 15, "carbs": 12, "fat": 6 },
-  "canh_chua_khong_ca": { "display": "Canh chua không cá", "calories": 120, "protein": 4, "carbs": 18, "fat": 3 },
+  "canh_chua": { "display": "Canh chua", "calories": 150, "protein": 10, "carbs": 14, "fat": 5 },
   "canh_rau": { "display": "Canh rau", "calories": 80, "protein": 3, "carbs": 10, "fat": 2 },
   "com_trang": { "display": "Cơm trắng", "calories": 205, "protein": 4, "carbs": 45, "fat": 0.5 },
   "dau_hu_chien": { "display": "Đậu hũ chiên", "calories": 180, "protein": 12, "carbs": 6, "fat": 12 },
-  "kim_chi": { "display": "Kim chi", "calories": 35, "protein": 2, "carbs": 6, "fat": 0.5 },
-  "mam_vung": { "display": "Mắm vừng lạc", "calories": 120, "protein": 5, "carbs": 8, "fat": 8 },
-  "rau_luoc": { "display": "Rau luộc", "calories": 45, "protein": 3, "carbs": 6, "fat": 0.5 },
-  "rau_xao": { "display": "Rau xào", "calories": 90, "protein": 4, "carbs": 8, "fat": 5 },
+  "dau_hu_sot_ca": { "display": "Đậu hũ sốt cà", "calories": 170, "protein": 11, "carbs": 9, "fat": 10 },
   "suon_nuong": { "display": "Sườn nướng", "calories": 450, "protein": 32, "carbs": 2, "fat": 34 },
   "thit_kho": { "display": "Thịt kho", "calories": 380, "protein": 26, "carbs": 10, "fat": 26 },
   "thit_kho_trung": { "display": "Thịt kho trứng", "calories": 310, "protein": 22, "carbs": 8, "fat": 20 },
-  "trung_chien": { "display": "Trứng chiên", "calories": 160, "protein": 11, "carbs": 1, "fat": 12 }
+  "trung_chien": { "display": "Trứng chiên", "calories": 160, "protein": 11, "carbs": 1, "fat": 12 },
+  "rau_xao": { "display": "Rau xào", "calories": 90, "protein": 4, "carbs": 8, "fat": 5 },
+  "rau_luoc": { "display": "Rau luộc", "calories": 45, "protein": 3, "carbs": 6, "fat": 0.5 }
 }

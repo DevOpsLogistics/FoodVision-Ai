@@ -4,17 +4,120 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Navigation from "@/components/Navigation";
 import BannerSlider from "@/components/BannerSlider";
+import TodayTimeline from "@/components/TodayTimeline";
+import RecentMealsSection, { type RecentMealItem } from "@/components/RecentMealsSection";
 import { useUser } from "@/hooks/useUser";
+import VisitorAvatars from "@/components/VisitorAvatars";
+import DishPhoto from "@/components/DishPhoto";
+import { visitorsForDish } from "@/data/communityVisitors";
+import { menuDishForScanClass } from "@/data/dishImages";
+import { formatPrice, RECIPE_CARDS, type RecipeCard } from "@/data/mealRecommendations";
 import { dashboardApi } from "@/lib/api";
 
-const COMMUNITY_FALLBACK = [
-  { title: "Cá hú kho", scans: 320, image: "/images/dishes/ca_hu_kho.jpg" },
-  { title: "Canh chua cá", scans: 215, image: "/images/dishes/canh_chua_co_ca.jpg" },
-  { title: "Sườn nướng", scans: 189, image: "/images/dishes/suon_nuong.jpg" },
-  { title: "Thịt kho trứng", scans: 150, image: "/images/dishes/thit_kho_trung.jpg" },
-  { title: "Đậu hũ sốt cà", scans: 120, image: "/images/dishes/dau_hu_sot_ca.jpg" },
-  { title: "Trứng chiên", scans: 95, image: "/images/dishes/trung_chien.jpg" },
-];
+type CommunityItem = {
+  id: string;
+  title: string;
+  scans: number;
+  image: string;
+};
+
+const DEFAULT_SCANS = [320, 215, 189, 150, 120, 95, 80, 70, 60];
+
+function buildCommunityItems(
+  trending?: Array<{ class_name?: string; scans: number }>,
+): CommunityItem[] {
+  const byId = new Map<string, CommunityItem>(
+    RECIPE_CARDS.map((recipe, i) => [
+      recipe.id,
+      {
+        id: recipe.id,
+        title: recipe.name,
+        image: recipe.image,
+        scans: DEFAULT_SCANS[i] ?? 50,
+      },
+    ]),
+  );
+
+  if (trending?.length) {
+    for (const row of trending) {
+      if (!row.class_name) continue;
+      const menuId = menuDishForScanClass(row.class_name);
+      const item = byId.get(menuId);
+      if (item) item.scans += row.scans;
+    }
+  }
+
+  return [...byId.values()].sort((a, b) => b.scans - a.scans).slice(0, 6);
+}
+
+const CHEF_PICK = RECIPE_CARDS.find((r) => r.id === "goi_cuon") ?? RECIPE_CARDS[0];
+
+function ChefRecommendationCard({ recipe }: { recipe: RecipeCard }) {
+  const [flipped, setFlipped] = useState(false);
+
+  return (
+    <div className="[perspective:1200px]">
+      <div
+        className={`relative w-full transition-transform duration-500 ease-in-out [transform-style:preserve-3d] ${
+          flipped ? "[transform:rotateY(180deg)]" : ""
+        }`}
+      >
+        {/* Mặt trước */}
+        <div className="relative [backface-visibility:hidden] bg-surface-container-lowest text-on-surface border border-surface-variant/30 rounded-xl p-lg flex flex-col md:flex-row gap-lg items-center overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-surface-variant opacity-10 rounded-full -mr-20 -mt-20 pointer-events-none" />
+          <div className="flex-1 z-10 w-full">
+            <span className="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-base block">
+              Lựa chọn của đầu bếp
+            </span>
+            <h3 className="font-headline-md text-headline-md mb-sm">{recipe.name}</h3>
+            <p className="font-body-lg text-body-lg text-on-surface-variant mb-md max-w-[500px]">
+              {recipe.description}
+            </p>
+            <button
+              type="button"
+              onClick={() => setFlipped(true)}
+              className="w-full sm:w-auto bg-red-500 text-white px-lg py-md rounded-lg font-label-md text-label-md hover:bg-red-600 transition-colors active:scale-95"
+            >
+              Xem công thức
+            </button>
+          </div>
+          <div className="w-full md:w-1/3 h-64 rounded-xl overflow-hidden z-10 border border-surface-variant/30 shadow-lg relative shrink-0">
+            <DishPhoto src={recipe.image} alt={recipe.name} sizes="(max-width: 768px) 100vw, 33vw" />
+          </div>
+        </div>
+
+        {/* Mặt sau */}
+        <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] bg-surface-container-lowest text-on-surface border border-red-500 rounded-xl p-lg flex flex-col overflow-hidden">
+          <div className="flex items-start justify-between gap-3 mb-base shrink-0">
+            <h3 className="font-headline-md text-headline-md">{recipe.name}</h3>
+            <span className="shrink-0 font-bold text-red-500 text-lg">{formatPrice(recipe.price)}</span>
+          </div>
+          <div className="flex-1 min-h-0 overflow-y-auto">
+            <p className="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-1">Nguyên liệu</p>
+            <ul className="font-body-md text-body-md text-on-surface-variant mb-3 list-disc list-inside space-y-0.5">
+              {recipe.ingredients.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+            <p className="font-label-sm text-label-sm text-outline uppercase tracking-wider mb-1">Công thức</p>
+            <ol className="font-body-md text-body-md text-on-surface-variant list-decimal list-inside space-y-1">
+              {recipe.steps.map((step, i) => (
+                <li key={i}>{step}</li>
+              ))}
+            </ol>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFlipped(false)}
+            className="w-full shrink-0 mt-3 bg-red-500 text-white text-center font-label-md text-label-md rounded-lg py-2.5 px-4 hover:bg-red-600 transition-colors active:scale-95"
+          >
+            Ấn để quay lại
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Dashboard() {
   const { user } = useUser();
@@ -23,7 +126,8 @@ export default function Dashboard() {
   const [targetCal, setTargetCal] = useState(2200);
   const [consumed, setConsumed] = useState({ protein: 0, carbs: 0, fat: 0 });
   const [targets, setTargets] = useState({ protein: 120, carbs: 250, fat: 70 });
-  const [communityItems, setCommunityItems] = useState(COMMUNITY_FALLBACK);
+  const [communityItems, setCommunityItems] = useState<CommunityItem[]>(() => buildCommunityItems());
+  const [recentMeals, setRecentMeals] = useState<RecentMealItem[]>([]);
 
   useEffect(() => {
     dashboardApi.summary().then((data) => {
@@ -31,16 +135,22 @@ export default function Dashboard() {
       setTargetCal((data.targets as { calories: number }).calories);
       setConsumed(data.consumed as { protein: number; carbs: number; fat: number });
       setTargets(data.targets as { protein: number; carbs: number; fat: number });
-      const trending = data.community_trending as Array<{ title: string; scans: number }>;
-      if (trending?.length) {
-        setCommunityItems(
-          trending.map((t) => ({
-            title: t.title,
-            scans: t.scans,
-            image: `/images/dishes/${t.title.toLowerCase().replace(/\s+/g, "_")}.jpg`,
-          })),
-        );
-      }
+      const trending = data.community_trending as Array<{
+        title: string;
+        scans: number;
+        class_name?: string;
+      }>;
+      setCommunityItems(buildCommunityItems(trending));
+      const raw = (data.recent_meals as Array<Record<string, unknown>>) ?? [];
+      setRecentMeals(
+        raw.map((m) => ({
+          id: m.id as number,
+          name: String(m.name ?? "Món ăn"),
+          meal_type: String(m.meal_type ?? "lunch"),
+          calories: Number(m.calories) || 0,
+          eaten_at: m.eaten_at as string | undefined,
+        })),
+      );
     }).catch(() => {});
   }, []);
 
@@ -217,171 +327,10 @@ export default function Dashboard() {
             </h2>
             <div className="flex-1 border-t border-b border-[#b82c2a] h-1.5"></div>
           </div>
-          <div className="bg-surface-container-lowest rounded-xl p-lg border border-surface-variant/30 flex flex-col gap-6">
-            <div className="flex gap-4 items-center">
-              <div className="text-on-surface-variant font-label-md w-16 text-right">08:00</div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500 shrink-0"></div>
-              <div className="flex-1 bg-surface-container-lowest p-3 rounded-lg border border-surface-variant/20 flex justify-between items-center">
-                <span className="font-body-md">Bữa sáng (Yến mạch)</span>
-              </div>
-            </div>
-            <div className="flex gap-4 items-center">
-              <div className="text-on-surface-variant font-label-md w-16 text-right">12:30</div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500 shrink-0 relative">
-                <span className="absolute w-3 h-3 rounded-full bg-yellow-500 animate-ping opacity-75"></span>
-              </div>
-              <div className="flex-1 bg-yellow-500/10 p-3 rounded-lg border border-yellow-500/20 flex justify-between items-center text-yellow-500">
-                <span className="font-body-md font-bold">Bữa trưa - Cần ghi nhận</span>
-              </div>
-            </div>
-            <div className="flex gap-4 items-center opacity-50">
-              <div className="text-on-surface-variant font-label-md w-16 text-right">15:00</div>
-              <div className="w-3 h-3 rounded-full bg-surface-variant shrink-0"></div>
-              <div className="flex-1 bg-surface-container-lowest p-3 rounded-lg border border-surface-variant/20 flex justify-between items-center">
-                <span className="font-body-md">Giờ uống nước (500ml)</span>
-              </div>
-            </div>
-          </div>
+          <TodayTimeline />
         </section>
 
-        {/* Recent Meals Section */}
-        <section className="mb-xl">
-          <div className="flex items-center justify-center mb-6 mt-8 opacity-90">
-            <div className="flex-1 border-t border-b border-[#b82c2a] h-1.5"></div>
-            <h2 className="px-6 font-bold text-lg md:text-xl text-on-surface uppercase tracking-widest text-center whitespace-nowrap">
-              Bữa ăn gần đây
-            </h2>
-            <div className="flex-1 border-t border-b border-[#b82c2a] h-1.5"></div>
-          </div>
-          <div className="flex justify-end mb-md">
-            <Link href="/diary" className="font-label-md text-label-md text-red-500 hover:text-red-400 hover:underline transition-all">
-              Xem nhật ký
-            </Link>
-          </div>
-          <div className="flex overflow-x-auto gap-md pb-4 hide-scrollbar snap-x">
-            {/* Meal Card 1 */}
-            <div className="bg-surface-container-lowest rounded-xl overflow-hidden editorial-card border border-[#F2EFE9] min-w-[280px] shrink-0 snap-start">
-              <img
-                className="w-full h-48 object-cover"
-                alt="Canh chua cá"
-                src="/images/dishes/canh_chua_co_ca.jpg"
-              />
-              <div className="p-md">
-                <div className="flex justify-between items-start mb-xs">
-                  <h3 className="font-label-md text-label-md text-on-surface">
-                    Canh chua có cá
-                  </h3>
-                  <span className="font-label-sm text-label-sm px-2 py-1 bg-primary/10 text-primary rounded-full whitespace-nowrap ml-2">
-                    Bữa trưa
-                  </span>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface-variant mb-md">
-                  Cá hú, bạc hà, đậu bắp, cà chua
-                </p>
-                <div className="flex justify-between items-center text-on-surface">
-                  <span className="font-label-sm text-label-sm">540 kcal</span>
-                  <span className="material-symbols-outlined text-[20px]">
-                    chevron_right
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Meal Card 2 */}
-            <div className="bg-surface-container-lowest rounded-xl overflow-hidden editorial-card border border-[#F2EFE9] min-w-[280px] shrink-0 snap-start">
-              <img
-                className="w-full h-48 object-cover"
-                alt="Thịt kho trứng"
-                src="/images/dishes/thit_kho_trung.jpg"
-              />
-              <div className="p-md">
-                <div className="flex justify-between items-start mb-xs">
-                  <h3 className="font-label-md text-label-md text-on-surface">
-                    Thịt kho trứng
-                  </h3>
-                  <span className="font-label-sm text-label-sm px-2 py-1 bg-tertiary/10 text-tertiary rounded-full whitespace-nowrap ml-2">
-                    Bữa sáng
-                  </span>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface-variant mb-md">
-                  Thịt ba chỉ, trứng vịt, nước dừa
-                </p>
-                <div className="flex justify-between items-center text-on-surface">
-                  <span className="font-label-sm text-label-sm">310 kcal</span>
-                  <span className="material-symbols-outlined text-[20px]">
-                    chevron_right
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Meal Card 3 */}
-            <div className="bg-surface-container-lowest rounded-xl overflow-hidden editorial-card border border-[#F2EFE9] min-w-[280px] shrink-0 snap-start">
-              <img
-                className="w-full h-48 object-cover"
-                alt="Đậu hũ sốt cà"
-                src="/images/dishes/dau_hu_sot_ca.jpg"
-              />
-              <div className="p-md">
-                <div className="flex justify-between items-start mb-xs">
-                  <h3 className="font-label-md text-label-md text-on-surface">
-                    Đậu hũ sốt cà
-                  </h3>
-                  <span className="font-label-sm text-label-sm px-2 py-1 bg-green-500/10 text-green-600 rounded-full whitespace-nowrap ml-2">
-                    Bữa tối
-                  </span>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface-variant mb-md">
-                  Đậu hũ non, cà chua, hành lá
-                </p>
-                <div className="flex justify-between items-center text-on-surface">
-                  <span className="font-label-sm text-label-sm">220 kcal</span>
-                  <span className="material-symbols-outlined text-[20px]">
-                    chevron_right
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Meal Card 4 */}
-            <div className="bg-surface-container-lowest rounded-xl overflow-hidden editorial-card border border-[#F2EFE9] min-w-[280px] shrink-0 snap-start">
-              <img
-                className="w-full h-48 object-cover"
-                alt="Sườn nướng"
-                src="/images/dishes/suon_nuong.jpg"
-              />
-              <div className="p-md">
-                <div className="flex justify-between items-start mb-xs">
-                  <h3 className="font-label-md text-label-md text-on-surface">
-                    Sườn nướng
-                  </h3>
-                  <span className="font-label-sm text-label-sm px-2 py-1 bg-primary/10 text-primary rounded-full whitespace-nowrap ml-2">
-                    Bữa trưa
-                  </span>
-                </div>
-                <p className="font-body-md text-body-md text-on-surface-variant mb-md">
-                  Sườn non, mật ong, tiêu xanh
-                </p>
-                <div className="flex justify-between items-center text-on-surface">
-                  <span className="font-label-sm text-label-sm">450 kcal</span>
-                  <span className="material-symbols-outlined text-[20px]">
-                    chevron_right
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Add New Action */}
-            <div className="bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant flex flex-col items-center justify-center min-w-[280px] shrink-0 snap-start cursor-pointer hover:bg-surface-container transition-colors active:scale-95 duration-200">
-              <span className="material-symbols-outlined text-48 text-outline mb-sm text-[48px]">
-                add_circle
-              </span>
-              <p className="font-label-md text-label-md text-outline">
-                Thêm bữa ăn
-              </p>
-            </div>
-          </div>
-        </section>
+        <RecentMealsSection meals={recentMeals.length > 0 ? recentMeals : undefined} />
 
         {/* Recommendations */}
         <section>
@@ -392,35 +341,11 @@ export default function Dashboard() {
             </h2>
             <div className="flex-1 border-t border-b border-[#b82c2a] h-1.5"></div>
           </div>
-          <div className="bg-surface-container-lowest text-on-surface border border-surface-variant/30 rounded-xl p-lg flex flex-col md:flex-row gap-lg items-center relative overflow-hidden">
-            {/* Decorative background shape */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-surface-variant opacity-10 rounded-full -mr-20 -mt-20"></div>
-            <div className="flex-1 z-10">
-              <span className="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-base block">
-                Lựa chọn của đầu bếp
-              </span>
-              <h3 className="font-headline-md text-headline-md mb-sm">
-                Sườn nướng
-              </h3>
-              <p className="font-body-lg text-body-lg text-on-surface-variant mb-md" style={{ maxWidth: '500px' }}>
-                Món sườn nướng thơm lừng, đậm đà gia vị truyền thống, gợi nhớ hương vị bữa cơm gia đình.
-              </p>
-              <button className="bg-surface-container-high text-on-surface border border-surface-variant px-lg py-md rounded-lg font-label-md text-label-md hover:bg-surface-container-highest transition-colors active:scale-95">
-                Xem công thức
-              </button>
-            </div>
-            <div className="w-full md:w-1/3 h-64 rounded-xl overflow-hidden z-10 border border-surface-variant/30 shadow-lg relative">
-              <img
-                className="absolute inset-0 w-full h-full object-cover"
-                alt="Grilled salmon fillet"
-                src="/images/dishes/suon_nuong.jpg"
-              />
-            </div>
-          </div>
+          <ChefRecommendationCard recipe={CHEF_PICK} />
         </section>
 
         {/* Community Trends Section */}
-        <section className="mt-xl mb-12 overflow-hidden">
+        <section className="mt-xl mb-12 overflow-x-hidden pb-6">
           <style>{`
             @keyframes marquee-scroll-right {
               0% { transform: translateX(-50%); }
@@ -445,26 +370,32 @@ export default function Dashboard() {
           <div className="relative w-full">
             <div className="marquee-container gap-4">
               {/* First Set of Items */}
-              {communityItems.map((item, idx) => (
-                <div key={`set1-${idx}`} className="w-[180px] shrink-0 bg-surface-container-lowest border border-surface-variant/30 rounded-xl p-3 flex flex-col gap-3 hover:bg-surface-container-low transition-colors cursor-pointer">
-                  <div className="w-full aspect-square rounded-lg bg-surface-variant overflow-hidden shrink-0">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+              {communityItems.map((item) => (
+                <div key={`set1-${item.id}`} className="w-[180px] shrink-0 bg-surface-container-lowest border border-surface-variant/30 rounded-xl p-3 pb-4 flex flex-col gap-3 hover:bg-surface-container-low transition-colors cursor-pointer">
+                  <div className="w-full aspect-square rounded-lg bg-surface-variant overflow-hidden shrink-0 relative">
+                    <DishPhoto src={item.image} alt={item.title} sizes="180px" />
                   </div>
                   <div className="text-center">
                     <h4 className="font-title-sm text-on-surface line-clamp-1">{item.title}</h4>
-                    <p className="font-body-sm text-on-surface-variant">{item.scans} lượt quét</p>
+                    <p className="font-body-sm text-on-surface-variant mb-2">{item.scans} lượt quét</p>
+                    <div className="flex justify-center">
+                      <VisitorAvatars visitors={visitorsForDish(item.id, 3)} size="sm" />
+                    </div>
                   </div>
                 </div>
               ))}
               {/* Second Set of Items (Duplicate for seamless loop) */}
-              {communityItems.map((item, idx) => (
-                <div key={`set2-${idx}`} className="w-[180px] shrink-0 bg-surface-container-lowest border border-surface-variant/30 rounded-xl p-3 flex flex-col gap-3 hover:bg-surface-container-low transition-colors cursor-pointer">
-                  <div className="w-full aspect-square rounded-lg bg-surface-variant overflow-hidden shrink-0">
-                    <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+              {communityItems.map((item) => (
+                <div key={`set2-${item.id}`} className="w-[180px] shrink-0 bg-surface-container-lowest border border-surface-variant/30 rounded-xl p-3 pb-4 flex flex-col gap-3 hover:bg-surface-container-low transition-colors cursor-pointer">
+                  <div className="w-full aspect-square rounded-lg bg-surface-variant overflow-hidden shrink-0 relative">
+                    <DishPhoto src={item.image} alt={item.title} sizes="180px" />
                   </div>
                   <div className="text-center">
                     <h4 className="font-title-sm text-on-surface line-clamp-1">{item.title}</h4>
-                    <p className="font-body-sm text-on-surface-variant">{item.scans} lượt quét</p>
+                    <p className="font-body-sm text-on-surface-variant mb-2">{item.scans} lượt quét</p>
+                    <div className="flex justify-center">
+                      <VisitorAvatars visitors={visitorsForDish(item.id, 3)} size="sm" />
+                    </div>
                   </div>
                 </div>
               ))}

@@ -1,6 +1,6 @@
 "use client";
 
-import Navigation from "@/components/Navigation";
+import { PageHeader, PageShell } from "@/components/PageLayout";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { useUser } from "@/hooks/useUser";
@@ -63,19 +63,11 @@ export default function Settings() {
   };
 
   return (
-    <div className="bg-background text-on-surface min-h-screen pb-[90px] md:pb-0">
-      <Navigation />
-
-      <main className="max-w-[1140px] mx-auto px-container-margin pt-16 md:pt-24 mb-xl">
-        {/* Page Title */}
-        <div className="mb-lg animate-fade-in">
-          <h2 className="font-headline-md text-headline-md text-on-surface mb-2">
-            Cài đặt
-          </h2>
-          <p className="font-body-md text-on-surface-variant">
-            Quản lý hành trình dinh dưỡng và trải nghiệm ứng dụng của bạn.
-          </p>
-        </div>
+    <PageShell>
+      <PageHeader
+        title="Cài đặt"
+        description="Quản lý hành trình dinh dưỡng và trải nghiệm ứng dụng của bạn."
+      />
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-md items-start">
           {/* Settings Categories (Bento Style) */}
@@ -455,7 +447,6 @@ export default function Settings() {
             </p>
           </div>
         </div>
-      </main>
-    </div>
+    </PageShell>
   );
 }

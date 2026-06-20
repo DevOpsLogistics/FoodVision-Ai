@@ -7,7 +7,7 @@ export default function FooterWrapper() {
   const pathname = usePathname();
   
   // Hide footer on full-screen/camera pages
-  const hiddenRoutes = ["/scanner", "/scanner/select-tray", "/ar-vision", "/detection-result"];
+  const hiddenRoutes = ["/ar-vision", "/detection-result"];
   if (hiddenRoutes.includes(pathname || "")) {
     return null;
   }

@@ -3,12 +3,13 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SOCIAL } from "@/data/socialLinks";
 
 export default function FloatingMenu() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  const hiddenRoutes = ["/scanner", "/scanner/select-tray", "/smart-fridge", "/ar-vision", "/detection-result"];
+  const hiddenRoutes = ["/smart-fridge", "/ar-vision", "/detection-result"];
 
   // Automatically slide out when entering the website
   useEffect(() => {
@@ -51,26 +52,24 @@ export default function FloatingMenu() {
           <span className="font-bold text-[15px] tracking-wide">Nhật ký</span>
         </Link>
 
-        <Link href="/dashboard" className="flex items-center gap-4 hover:text-[#38d9a9] transition-colors group">
+        <Link href="/meal-recommendations" className="flex items-center gap-4 hover:text-[#38d9a9] transition-colors group">
           <div className="w-10 h-10 rounded-full bg-[#2b2d31] flex items-center justify-center group-hover:bg-[#38d9a9] group-hover:text-white transition-colors">
             <span className="material-symbols-outlined text-[20px]">restaurant</span>
           </div>
           <span className="font-bold text-[15px] tracking-wide">Thực đơn</span>
         </Link>
 
-        <Link href="/dashboard" className="flex items-center gap-4 hover:text-[#ffd43b] transition-colors group">
-          <div className="w-10 h-10 rounded-full bg-[#2b2d31] flex items-center justify-center group-hover:bg-[#ffd43b] group-hover:text-white transition-colors">
-            <span className="material-symbols-outlined text-[20px]">insights</span>
-          </div>
-          <span className="font-bold text-[15px] tracking-wide">Thống kê</span>
-        </Link>
-
-        <Link href="/dashboard" className="flex items-center gap-4 hover:text-[#4dabf7] transition-colors group">
+        <a
+          href={SOCIAL.facebookGroup}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-4 hover:text-[#4dabf7] transition-colors group"
+        >
           <div className="w-10 h-10 rounded-full bg-[#2b2d31] flex items-center justify-center group-hover:bg-[#4dabf7] group-hover:text-white transition-colors">
             <span className="material-symbols-outlined text-[20px]">forum</span>
           </div>
           <span className="font-bold text-[15px] tracking-wide">Cộng đồng</span>
-        </Link>
+        </a>
 
         <Link href="/settings" className="flex items-center gap-4 hover:text-[#eebefa] transition-colors group">
           <div className="w-10 h-10 rounded-full bg-[#2b2d31] flex items-center justify-center group-hover:bg-[#eebefa] group-hover:text-white transition-colors">

@@ -7,8 +7,8 @@ router = APIRouter(prefix="/recipes", tags=["recipes"])
 RECIPES = [
     {
         "id": 1,
-        "name": "Canh chua không cá",
-        "class_name": "canh_chua_khong_ca",
+        "name": "Canh chua",
+        "class_name": "canh_chua",
         "time_minutes": 25,
         "featured": True,
         "tags": ["vegetarian"],
@@ -34,12 +34,12 @@ RECIPES = [
     },
     {
         "id": 4,
-        "name": "Rau xào",
-        "class_name": "rau_xao",
-        "time_minutes": 10,
+        "name": "Canh rau",
+        "class_name": "canh_rau",
+        "time_minutes": 15,
         "featured": False,
         "tags": ["quick", "fiber"],
-        "reason": "Chất xơ cao, hỗ trợ tiêu hóa.",
+        "reason": "Nhẹ bụng, bổ sung rau xanh cho bữa trưa.",
     },
     {
         "id": 5,

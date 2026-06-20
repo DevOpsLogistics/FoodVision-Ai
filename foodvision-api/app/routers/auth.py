@@ -1,4 +1,8 @@
 from urllib.parse import urlencode
+import hashlib
+import secrets
+import string
+from datetime import datetime, timedelta
 
 import httpx
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -7,11 +11,28 @@ from sqlalchemy.orm import Session
 
 from app.config import settings
 from app.database import get_db
-from app.models import NutritionGoal, User
-from app.schemas import AuthResponse, LoginRequest, RegisterRequest
+from app.email_service import send_new_password_email
+from app.models import NutritionGoal, PasswordResetToken, User
+from app.schemas import (
+    AuthResponse,
+    ForgotPasswordRequest,
+    LoginRequest,
+    MessageResponse,
+    RegisterRequest,
+    ResetPasswordRequest,
+)
 from app.security import create_access_token, hash_password, user_to_dict, verify_password
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+
+FORGOT_PASSWORD_MSG = (
+    "Nếu email tồn tại trong hệ thống, mật khẩu mới sẽ được gửi về hộp thư của bạn."
+)
+
+
+def _generate_temp_password(length: int = 8) -> str:
+    alphabet = string.ascii_letters + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 def _create_user_response(user: User, db: Session) -> AuthResponse:
@@ -48,6 +69,40 @@ def login(body: LoginRequest, db: Session = Depends(get_db)):
     if not user or not verify_password(body.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Email hoặc mật khẩu không đúng")
     return _create_user_response(user, db)
+
+
+@router.post("/forgot-password", response_model=MessageResponse)
+def forgot_password(body: ForgotPasswordRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == body.email.lower()).first()
+    if user:
+        new_password = _generate_temp_password()
+        user.password_hash = hash_password(new_password)
+        db.commit()
+        send_new_password_email(user.email, new_password)
+    return MessageResponse(message=FORGOT_PASSWORD_MSG)
+
+
+@router.post("/reset-password", response_model=MessageResponse)
+def reset_password(body: ResetPasswordRequest, db: Session = Depends(get_db)):
+    token_hash = hashlib.sha256(body.token.encode()).hexdigest()
+    row = (
+        db.query(PasswordResetToken)
+        .filter(
+            PasswordResetToken.token_hash == token_hash,
+            PasswordResetToken.used_at.is_(None),
+            PasswordResetToken.expires_at > datetime.utcnow(),
+        )
+        .first()
+    )
+    if not row:
+        raise HTTPException(status_code=400, detail="Link không hợp lệ hoặc đã hết hạn")
+    user = db.query(User).filter(User.id == row.user_id).first()
+    if not user:
+        raise HTTPException(status_code=400, detail="Link không hợp lệ hoặc đã hết hạn")
+    user.password_hash = hash_password(body.password)
+    row.used_at = datetime.utcnow()
+    db.commit()
+    return MessageResponse(message="Đặt lại mật khẩu thành công. Bạn có thể đăng nhập.")
 
 
 @router.get("/google")

@@ -4,8 +4,7 @@ import { useEffect } from "react";
 
 export default function AIChatBot() {
   useEffect(() => {
-    // Check if the script is already loaded
-    if (document.querySelector('script[data-preny-bot-id]')) return;
+    if (document.querySelector("script[data-preny-bot-id]")) return;
 
     const script = document.createElement("script");
     script.src = "https://app.preny.ai/embed-global.js";
@@ -19,14 +18,14 @@ export default function AIChatBot() {
     document.body.appendChild(script);
 
     return () => {
-      // Cleanup on unmount
-      const existingScript = document.querySelector('script[data-preny-bot-id]');
+      const existingScript = document.querySelector("script[data-preny-bot-id]");
       if (existingScript) existingScript.remove();
-      // Also remove the bot container if Preny injects one
-      const botContainer = document.querySelector('[data-preny-bot-id]');
+      const botContainer = document.querySelector("[data-preny-bot-id]");
       if (botContainer) botContainer.remove();
+      const host = document.querySelector("#preny-chat-host");
+      if (host) host.remove();
     };
   }, []);
 
-  return null; // Preny injects its own UI
+  return null;
 }
